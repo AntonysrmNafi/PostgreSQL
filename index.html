@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en" data-copied="Copied">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PostgreSQL, Zero to Advanced</title>
+<meta name="description" content="A twenty three module class that assumes you know nothing. It goes from what a database is to recursive queries, PL/pgSQL, row level security, replication and pgvector, with a real PostgreSQL Practice Lab in your browser.">
+<script src="assets/theme.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Hind+Siliguri:wght@500;700&family=Space+Grotesk:wght@500;700&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+<header class="topbar">
+  <button class="btn" id="menu" type="button" aria-label="Menu">☰</button>
+  <a class="brand" href="#top"><span class="mark">Pg</span><span>PostgreSQL</span></a>
+  <span class="spacer"></span>
+  <a class="btn" href="bn.html" hreflang="bn">বাংলা</a>
+  <button class="btn" id="lab-open" type="button">▶ Practice Lab</button>
+  <button class="btn" id="theme" type="button" aria-label="Theme">◐<span class="lbl">Theme</span></button>
+</header>
+<div class="ticker" aria-hidden="true"><div><span>SELECT</span><span>★</span><span>JOIN</span><span>★</span><span>INDEX</span><span>★</span><span>MVCC</span><span>★</span><span>WAL</span><span>★</span><span>CTE</span><span>★</span><span>JSONB</span><span>★</span><span>VACUUM</span><span>★</span><span>TRIGGER</span><span>★</span><span>PARTITION</span><span>★</span><span>EXPLAIN</span><span>★</span><span>COMMIT</span><span>★</span><span>SELECT</span><span>★</span><span>JOIN</span><span>★</span><span>INDEX</span><span>★</span><span>MVCC</span><span>★</span><span>WAL</span><span>★</span><span>CTE</span><span>★</span><span>JSONB</span><span>★</span><span>VACUUM</span><span>★</span><span>TRIGGER</span><span>★</span><span>PARTITION</span><span>★</span><span>EXPLAIN</span><span>★</span><span>COMMIT</span><span>★</span></div></div>
+<div class="scrim"></div>
+<div class="shell">
+<nav class="syllabus" aria-label="Syllabus">
+  <h2>Syllabus</h2>
+  <input class="search" id="q" type="search" placeholder="Search modules" aria-label="Search modules">
+  <div class="group lv-b">Foundations</div><ol class="lv-b"><li><a href="#m01"><b>01</b><span>Start Here: Class Zero</span></a></li><li><a href="#m02"><b>02</b><span>Introduction and Setup</span></a></li><li><a href="#m03"><b>03</b><span>Install PostgreSQL on Windows</span></a></li><li><a href="#m04"><b>04</b><span>SQL Basics: Your First Statements</span></a></li><li><a href="#m05"><b>05</b><span>Tables and Data Types</span></a></li><li><a href="#m06"><b>06</b><span>CRUD: Create, Read, Update, Delete</span></a></li><li><a href="#m07"><b>07</b><span>Querying: Filters, Joins, Aggregates</span></a></li><li><a href="#m08"><b>08</b><span>Functions and Expressions</span></a></li></ol><div class="group lv-i">Intermediate</div><ol class="lv-i"><li><a href="#m09"><b>09</b><span>Constraints, Relationships, Normalization</span></a></li><li><a href="#m10"><b>10</b><span>Changing Structure: ALTER, Schemas, Sequences</span></a></li><li><a href="#m11"><b>11</b><span>Subqueries, Set Operations, CASE</span></a></li><li><a href="#m12"><b>12</b><span>Indexes and Query Plans</span></a></li><li><a href="#m13"><b>13</b><span>Pattern Matching and Full Text Search</span></a></li><li><a href="#m14"><b>14</b><span>Transactions, MVCC and Locking</span></a></li></ol><div class="group lv-a">Advanced</div><ol class="lv-a"><li><a href="#m15"><b>15</b><span>Advanced SQL: CTEs, Windows, JSONB, Views</span></a></li><li><a href="#m16"><b>16</b><span>Recursive Queries and Hierarchies</span></a></li><li><a href="#m17"><b>17</b><span>PL/pgSQL Programming</span></a></li><li><a href="#m18"><b>18</b><span>Functions, Triggers, Partitioning</span></a></li><li><a href="#m19"><b>19</b><span>Replication, Extensions, Tuning</span></a></li><li><a href="#m20"><b>20</b><span>Security, Backup and Production</span></a></li><li><a href="#m21"><b>21</b><span>Row Level Security</span></a></li><li><a href="#m22"><b>22</b><span>Modern PostgreSQL: Docker Compose and pgvector</span></a></li></ol><div class="group lv-r">Reference</div><ol class="lv-r"><li><a href="#m23"><b>23</b><span>Cheat Sheet, Glossary, Next Steps</span></a></li></ol>
+</nav>
+<main id="top">
+  <section class="hero">
+    <div>
+      <div class="eyebrow">Open Courseware · Database Systems</div>
+      <h1>PostgreSQL,<br><em>zero</em> to advanced</h1>
+      <p class="lead">A twenty three module class that assumes you know nothing. It goes from what a database is to recursive queries, PL/pgSQL, row level security, replication and pgvector, with a real PostgreSQL Practice Lab in your browser.</p>
+      <div class="cta"><a class="btn primary" href="#m01">Start Module 01 →</a><button class="btn" id="lab-open2" type="button">▶ Practice Lab</button></div>
+    </div>
+    <svg class="schema" viewBox="0 0 420 340" role="img" aria-label="students and courses linked by enrollments">
+<path class="ln" d="M91 128 V178 H175 V222"/><path class="ln" d="M329 128 V178 H245 V222"/>
+<text x="97" y="160" class="mu">1</text><text x="160" y="212" class="mu">N</text><text x="335" y="160" class="mu">1</text><text x="250" y="212" class="mu">N</text>
+<g class="t"><rect class="tb" x="16" y="20" width="150" height="108" rx="8"/><rect class="th" x="16" y="20" width="150" height="22"/><text class="hd" x="28" y="36">students</text><text x="28" y="62">id <tspan class="mu">PK</tspan></text><text x="28" y="82">full_name</text><text x="28" y="102">email <tspan class="mu">UNIQUE</tspan></text><text x="28" y="120">gpa</text></g>
+<g class="t"><rect class="tb" x="254" y="20" width="150" height="108" rx="8"/><rect class="th" x="254" y="20" width="150" height="22"/><text class="hd" x="266" y="36">courses</text><text x="266" y="62">id <tspan class="mu">PK</tspan></text><text x="266" y="82">code <tspan class="mu">UNIQUE</tspan></text><text x="266" y="102">title</text><text x="266" y="120">credits</text></g>
+<g class="t"><rect class="tb" x="135" y="222" width="150" height="92" rx="8"/><rect class="th" x="135" y="222" width="150" height="22"/><text class="hd" x="147" y="238">enrollments</text><text x="147" y="266">student_id <tspan class="mu">FK</tspan></text><text x="147" y="286">course_id <tspan class="mu">FK</tspan></text><text x="147" y="306">grade</text></g>
+</svg>
+  </section>
+  <dl class="meta"><div><dt>Duration</dt><dd>≈ 80 hours</dd></div><div><dt>Modules</dt><dd>23</dd></div><div><dt>Prerequisite</dt><dd>None at all</dd></div><div><dt>Version</dt><dd>PostgreSQL 16+</dd></div></dl>
+  <ol class="track"><li class="lv-b"><b>Foundations</b><span>Modules 01 to 08</span><p>What a database is, install on Windows, SQL basics, tables, CRUD, queries and expressions.</p></li><li class="lv-i"><b>Intermediate</b><span>Modules 09 to 14</span><p>Constraints, ALTER, subqueries, indexes, full text search and transactions.</p></li><li class="lv-a"><b>Advanced</b><span>Modules 15 to 22</span><p>Window functions, recursion, PL/pgSQL, triggers, partitioning, replication, security, RLS and pgvector.</p></li></ol>
+  <section class="module reveal lv-b" id="m01"><div class="mhead"><span class="num" aria-hidden="true">01</span><div><span class="badge">Module 01 · Beginner</span><h2>Start Here: Class Zero</h2></div></div><div class="body">
+<p>This course assumes you have <strong>never written code and never heard of a database</strong>. Read the modules in order, like classes. After each one, open the <strong>Practice Lab</strong> in the top bar and type the examples yourself.</p>
+<h3>What is data?</h3>
+<p>Data is just recorded facts: a student's name, a product's price, today's temperature. Every app you use (banking, social media, shopping) stores and reads data all day.</p>
+<h3>What is a database?</h3>
+<p>A database is an organised, safe place to keep data so it can be found fast. Think of a school office. A loose pile of papers is hard to search. A <em>filing system</em> with labelled cabinets is not. The program that runs the filing system, storing, finding and protecting the papers, is called a <strong>DBMS</strong> (database management system). PostgreSQL is one.</p>
+<h3>What is a table?</h3>
+<p>Data inside a relational database lives in <strong>tables</strong>, like one sheet in a spreadsheet. <strong>Columns</strong> are the labels, and each <strong>row</strong> is one record, here one student.</p>
+<div class="tbl"><table><thead><tr><th>id</th><th>full_name</th><th>email</th><th>gpa</th></tr></thead><tbody><tr><td>1</td><td>Ayesha Rahman</td><td>ayesha@uni.edu</td><td>3.80</td></tr><tr><td>2</td><td>Tanvir Hasan</td><td>tanvir@uni.edu</td><td>3.40</td></tr></tbody></table></div>
+<h3>What is SQL?</h3>
+<p><strong>SQL</strong> (Structured Query Language) is how you talk to the database. You describe <em>what</em> you want, and the database works out <em>how</em>. <code>SELECT full_name FROM students</code> reads almost like English: "show me the full names from students".</p>
+<h3>What is PostgreSQL?</h3>
+<p>PostgreSQL (say "post-gres-Q-L", or just "Postgres") is a free, open source DBMS. It runs as a <strong>server</strong>. Like a restaurant, you (the <strong>client</strong>) give an order (SQL) to the waiter, and the kitchen (the server) prepares and returns the result.</p>
+<h3>How to study</h3>
+<ul><li>Green badges are beginner, yellow intermediate, pink advanced. Do not skip ahead.</li><li>Type every example yourself. Press <strong>Try</strong> on a code block to send it to the lab.</li><li>Errors are normal and useful. Break things on purpose.</li></ul>
+<aside class="callout take"><b>Key takeaway</b><p>Database = organised tables. SQL = the language to ask for data. PostgreSQL = the program that stores the tables and understands SQL.</p></aside>
+</div></section><section class="module reveal lv-b" id="m02"><div class="mhead"><span class="num" aria-hidden="true">02</span><div><span class="badge">Module 02 · Beginner</span><h2>Introduction and Setup</h2></div></div><div class="body">
+<p>PostgreSQL is an open source <strong>object-relational database</strong> with more than 30 years of development. It is respected for correctness, strict SQL standards support and extensibility: JSONB, full text search, PostGIS, custom types and extensions.</p>
+<h3>How data is organised</h3>
+<ol class="hier"><li><b>Cluster</b><span>one running server</span></li><li><b>Database</b><span>isolated collection</span></li><li><b>Schema</b><span>namespace, default <code>public</code></span></li><li><b>Table</b><span>rows and columns</span></li></ol>
+<figure class="code"><figcaption><span>Shell</span><span class="fa"><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sh"># Debian or Ubuntu
+sudo apt install postgresql
+sudo -u postgres psql
+
+# macOS (Homebrew)
+brew install postgresql@16
+brew services start postgresql@16
+psql postgres</code></pre></figure>
+<p>Connect with <code>psql</code>, create a database and look around:</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">CREATE DATABASE university;
+-- Meta commands work only inside psql.
+-- \c connect, \l list databases, \dt list tables, \d describe, \q quit
+\c university</code></pre></figure>
+<aside class="callout tip"><b>Tip</b><p>Learn in <code>psql</code> first. GUI tools such as pgAdmin or DBeaver are easier to appreciate once the basics are clear.</p></aside>
+</div></section><section class="module reveal lv-b" id="m03"><div class="mhead"><span class="num" aria-hidden="true">03</span><div><span class="badge">Module 03 · Beginner</span><h2>Install PostgreSQL on Windows</h2></div></div><div class="body">
+<p>The official installer is about 300 MB and includes the server, the <code>psql</code> command line and the pgAdmin app.</p>
+<ol class="plain">
+<li>Open <strong>postgresql.org/download/windows</strong> and choose <em>Download the installer</em>. Pick the newest version (16 or higher) for Windows x86 64.</li>
+<li>Run the downloaded <code>.exe</code> and allow administrator access.</li>
+<li>Keep the default folder and keep these components ticked: PostgreSQL Server, pgAdmin 4, Command Line Tools.</li>
+<li>Choose a <strong>password for the superuser <code>postgres</code></strong> and write it down. It is hard to recover.</li>
+<li>Keep the default port <code>5432</code> and the default locale, then finish.</li>
+<li>Open the Start menu and run <strong>SQL Shell (psql)</strong>. Press Enter four times to accept the defaults (server, database, port, user), then type your password. The password stays invisible while typing, which is normal.</li>
+<li>Test the installation:</li>
+</ol>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">SELECT version();
+CREATE DATABASE university;
+\c university</code></pre></figure>
+<h3>Other ways</h3>
+<p>You can install from PowerShell with <code>winget</code>, or run PostgreSQL in <strong>Docker</strong> without installing it.</p>
+<figure class="code"><figcaption><span>Shell</span><span class="fa"><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sh"># Optional: install with winget (PowerShell as Administrator)
+winget install PostgreSQL.PostgreSQL.16
+
+# Connect from PowerShell after adding C:\Program Files\PostgreSQL\16\bin to PATH
+psql -U postgres -h localhost</code></pre></figure>
+<figure class="code"><figcaption><span>Shell</span><span class="fa"><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sh">docker run --name pg -e POSTGRES_PASSWORD=secret -p 5432:5432 -d postgres:16
+docker exec -it pg psql -U postgres</code></pre></figure>
+<h3>If something goes wrong</h3>
+<div class="tbl"><table><thead><tr><th>Problem</th><th>Fix</th></tr></thead><tbody><tr><td>psql is not recognized</td><td>Use SQL Shell (psql) from the Start menu, or add the PostgreSQL bin folder to PATH</td></tr><tr><td>password authentication failed</td><td>You typed the wrong postgres password. Use the one chosen at install time</td></tr><tr><td>port 5432 already in use</td><td>Another PostgreSQL is running. Stop it or pick another port during install</td></tr><tr><td>Nothing appears when I type the password</td><td>That is normal, the shell hides it. Type it and press Enter</td></tr></tbody></table></div>
+<aside class="callout tip"><b>Tip</b><p>Do not want to install anything yet? The <strong>Practice Lab</strong> runs a real PostgreSQL inside your browser.</p></aside>
+</div></section><section class="module reveal lv-b" id="m04"><div class="mhead"><span class="num" aria-hidden="true">04</span><div><span class="badge">Module 04 · Beginner</span><h2>SQL Basics: Your First Statements</h2></div></div><div class="body">
+<p>Before real queries, learn the grammar. A SQL statement is like a sentence: a <strong>keyword</strong> says what to do, and the rest says to what.</p>
+<ul><li>Every statement ends with a semicolon <code>;</code>.</li><li>Keywords such as <code>SELECT</code> are not case sensitive. Convention: UPPERCASE keywords, lowercase names.</li><li>Text goes in <strong>single quotes</strong> like <code>'this'</code>. Double quotes are for unusual names.</li><li>Comments: <code>-- one line</code> or <code>/* many lines */</code>.</li><li>Spaces and line breaks do not matter, so format for readability.</li><li>Name things in <code>lowercase_with_underscores</code>, with no spaces.</li></ul>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">-- Your first statements
+SELECT 'Hello, PostgreSQL!';
+SELECT 2 + 3 * 4 AS answer;
+SELECT current_date, now();
+SELECT 'Ayesha' || ' ' || 'Rahman' AS full_name;</code></pre></figure>
+<h3>Anatomy of a statement</h3>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">SELECT full_name FROM students WHERE gpa &gt; 3.5;</code></pre></figure>
+<div class="tbl"><table><thead><tr><th>Part</th><th>Meaning</th></tr></thead><tbody><tr><td>SELECT full_name</td><td>which columns to show</td></tr><tr><td>FROM students</td><td>which table to read</td></tr><tr><td>WHERE gpa > 3.5</td><td>which rows to keep</td></tr><tr><td>;</td><td>end of the statement</td></tr></tbody></table></div>
+<h3>The five command groups</h3>
+<div class="tbl"><table><thead><tr><th>Group</th><th>Commands</th><th>Purpose</th></tr></thead><tbody><tr><td>DDL</td><td>CREATE, ALTER, DROP</td><td>Define structure</td></tr><tr><td>DML</td><td>INSERT, UPDATE, DELETE</td><td>Change data</td></tr><tr><td>DQL</td><td>SELECT</td><td>Read data</td></tr><tr><td>DCL</td><td>GRANT, REVOKE</td><td>Control access</td></tr><tr><td>TCL</td><td>BEGIN, COMMIT, ROLLBACK</td><td>Group changes safely</td></tr></tbody></table></div>
+<h3>Reading error messages</h3>
+<ul><li><code>syntax error at or near "x"</code>: a typo close to the word x.</li><li><code>relation "x" does not exist</code>: wrong table name, or it is not created yet.</li><li><code>column "x" does not exist</code>: misspelled column.</li></ul>
+<details class="ex"><summary data-show="Show solution" data-hide="Hide solution"><small>Practice</small><span>Show your own name and today's date in one statement.</span></summary><figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">SELECT 'Your Name' AS name, current_date AS today;</code></pre></figure></details>
+<aside class="callout take"><b>Key takeaway</b><p>Errors are information, not failure. Read the first line and look at the word after <em>near</em>.</p></aside>
+</div></section><section class="module reveal lv-b" id="m05"><div class="mhead"><span class="num" aria-hidden="true">05</span><div><span class="badge">Module 05 · Beginner</span><h2>Tables and Data Types</h2></div></div><div class="body">
+<p>A table stores rows; every column has a <strong>type</strong> that PostgreSQL enforces. Picking the right type is the cheapest form of data validation.</p>
+<div class="tbl"><table><thead><tr><th>Type</th><th>Use it for</th></tr></thead><tbody><tr><td>SMALLINT, INTEGER, BIGINT</td><td>Whole numbers of growing size</td></tr><tr><td>NUMERIC(p,s)</td><td>Exact decimals such as money</td></tr><tr><td>TEXT</td><td>Strings of any length (use VARCHAR(n) only when the limit is a business rule)</td></tr><tr><td>BOOLEAN</td><td>true or false</td></tr><tr><td>DATE, TIMESTAMPTZ</td><td>Calendar dates and exact moments in time</td></tr><tr><td>UUID</td><td>Globally unique identifiers</td></tr><tr><td>JSONB</td><td>Semi structured documents that can be indexed</td></tr><tr><td>type[], ENUM</td><td>Lists, and small fixed sets of labels</td></tr></tbody></table></div>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">CREATE TABLE students (
+    id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    full_name   TEXT         NOT NULL,
+    email       TEXT         NOT NULL UNIQUE,
+    gpa         NUMERIC(3,2) CHECK (gpa BETWEEN 0 AND 4),
+    enrolled_at TIMESTAMPTZ  NOT NULL DEFAULT now()
+);</code></pre></figure>
+<aside class="callout tip"><b>Tip</b><p>Prefer <code>TIMESTAMPTZ</code> over <code>TIMESTAMP</code>, <code>NUMERIC</code> over <code>FLOAT</code> for money, and <code>IDENTITY</code> over the older <code>SERIAL</code>.</p></aside>
+</div></section><section class="module reveal lv-b" id="m06"><div class="mhead"><span class="num" aria-hidden="true">06</span><div><span class="badge">Module 06 · Beginner</span><h2>CRUD: Create, Read, Update, Delete</h2></div></div><div class="body">
+<p>The four everyday operations map to <code>INSERT</code>, <code>SELECT</code>, <code>UPDATE</code> and <code>DELETE</code>. <code>RETURNING</code> gives back the affected rows without a second query, and <code>ON CONFLICT</code> turns an insert into an upsert.</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">INSERT INTO students (full_name, email, gpa)
+VALUES ('Ayesha Rahman', 'ayesha@uni.edu', 3.80),
+       ('Tanvir Hasan',  'tanvir@uni.edu', 3.40)
+RETURNING id;
+
+UPDATE students SET gpa = 3.90
+WHERE email = 'ayesha@uni.edu'
+RETURNING id, gpa;
+
+DELETE FROM students WHERE gpa &lt; 1.0;
+
+-- Upsert: insert, or update when the key already exists
+INSERT INTO courses (code, title, credits)
+VALUES ('CS101', 'Intro to CS', 3)
+ON CONFLICT (code) DO UPDATE SET title = EXCLUDED.title;</code></pre></figure>
+<aside class="callout warn"><b>Caution</b><p><code>UPDATE</code> or <code>DELETE</code> without <code>WHERE</code> changes every row. Run the same condition as a <code>SELECT</code> first, or wrap the change in <code>BEGIN</code> so you can <code>ROLLBACK</code>.</p></aside>
+</div></section><section class="module reveal lv-b" id="m07"><div class="mhead"><span class="num" aria-hidden="true">07</span><div><span class="badge">Module 07 · Beginner</span><h2>Querying: Filters, Joins, Aggregates</h2></div></div><div class="body">
+<p>SQL is written in one order but evaluated in another. Knowing the real order explains most beginner errors, such as why a column alias cannot be used in <code>WHERE</code>.</p>
+<p><strong>FROM, JOIN</strong> then <strong>WHERE</strong> then <strong>GROUP BY</strong> then <strong>HAVING</strong> then <strong>SELECT</strong> then <strong>ORDER BY</strong> then <strong>LIMIT</strong>.</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">SELECT c.code,
+       count(*)              AS enrolled,
+       round(avg(e.grade),2) AS avg_grade
+FROM courses c
+JOIN enrollments e ON e.course_id = c.id
+GROUP BY c.code
+HAVING count(*) &gt;= 5
+ORDER BY enrolled DESC
+LIMIT 3;</code></pre></figure>
+<div class="tbl res"><table><caption>Result</caption><thead><tr><th>code</th><th>enrolled</th><th>avg_grade</th></tr></thead><tbody><tr><td>CS101</td><td>42</td><td>3.12</td></tr><tr><td>MA201</td><td>37</td><td>2.88</td></tr><tr><td>PH110</td><td>29</td><td>3.41</td></tr></tbody></table></div>
+<h3>Join types</h3>
+<ul><li><code>INNER JOIN</code>: only rows that match on both sides.</li><li><code>LEFT JOIN</code>: every left row, with NULL where nothing matches.</li><li><code>FULL JOIN</code>: everything from both sides.</li></ul>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">-- Students who have not enrolled in anything
+SELECT s.full_name
+FROM students s
+LEFT JOIN enrollments e ON e.student_id = s.id
+WHERE e.student_id IS NULL;</code></pre></figure>
+<details class="ex"><summary data-show="Show solution" data-hide="Hide solution"><small>Practice</small><span>List every course that has no enrolled student.</span></summary><figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">SELECT c.code
+FROM courses c
+LEFT JOIN enrollments e ON e.course_id = c.id
+WHERE e.course_id IS NULL;</code></pre></figure></details>
+<aside class="callout tip"><b>Tip</b><p>List the columns you need instead of <code>SELECT *</code>. It is faster, clearer and does not break when the table changes.</p></aside>
+</div></section><section class="module reveal lv-b" id="m08"><div class="mhead"><span class="num" aria-hidden="true">08</span><div><span class="badge">Module 08 · Beginner</span><h2>Functions and Expressions</h2></div></div><div class="body">
+<p>PostgreSQL ships with hundreds of built in functions. Four families cover most daily work: text, numbers, dates and NULL handling.</p>
+<div class="tbl"><table><thead><tr><th>Family</th><th>Common tools</th></tr></thead><tbody><tr><td>Text</td><td>lower(), upper(), trim(), replace(), split_part(), format(), ||, ILIKE</td></tr><tr><td>Numbers</td><td>round(), ceil(), floor(), abs(), mod(), random()</td></tr><tr><td>Date and time</td><td>now(), current_date, interval, date_trunc(), extract(), age(), to_char()</td></tr><tr><td>NULL and casting</td><td>COALESCE(), NULLIF(), IS DISTINCT FROM, ::type, CAST()</td></tr></tbody></table></div>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">SELECT lower(email)                        AS email,
+       full_name || ' &lt;' || email || '&gt;'   AS display,
+       COALESCE(gpa, 0)                    AS gpa_or_zero,
+       date_trunc('month', enrolled_at)    AS month,
+       now() - enrolled_at                 AS time_enrolled,
+       to_char(enrolled_at, 'DD Mon YYYY') AS pretty_date,
+       gpa::int                            AS gpa_rounded
+FROM students
+WHERE full_name ILIKE 'a%'
+  AND enrolled_at &gt;= now() - interval '1 year';</code></pre></figure>
+<aside class="callout warn"><b>Caution</b><p>NULL means <em>unknown</em>, not zero or empty. <code>x = NULL</code> is never true. Use <code>IS NULL</code> or <code>IS DISTINCT FROM</code>.</p></aside>
+</div></section><section class="module reveal lv-i" id="m09"><div class="mhead"><span class="num" aria-hidden="true">09</span><div><span class="badge">Module 09 · Intermediate</span><h2>Constraints, Relationships, Normalization</h2></div></div><div class="body">
+<p>Constraints let the database defend its own data: <code>PRIMARY KEY</code>, <code>FOREIGN KEY</code>, <code>UNIQUE</code>, <code>NOT NULL</code> and <code>CHECK</code>. Application code has bugs; constraints do not forget.</p>
+<ul><li><strong>One to many:</strong> a foreign key on the many side.</li><li><strong>Many to many:</strong> a junction table with a composite key, as below.</li><li><strong>One to one:</strong> a foreign key that is also <code>UNIQUE</code>.</li></ul>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">CREATE TABLE courses (
+    id      BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    code    TEXT     NOT NULL UNIQUE,
+    title   TEXT     NOT NULL,
+    credits SMALLINT NOT NULL CHECK (credits &gt; 0)
+);
+
+-- Junction table for the many to many relationship
+CREATE TABLE enrollments (
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    course_id  BIGINT NOT NULL REFERENCES courses(id)  ON DELETE RESTRICT,
+    grade      NUMERIC(3,2),
+    PRIMARY KEY (student_id, course_id)
+);</code></pre></figure>
+<h3>Normalization in three lines</h3>
+<ul><li><strong>1NF:</strong> one value per cell, no repeating groups.</li><li><strong>2NF:</strong> every column depends on the whole key.</li><li><strong>3NF:</strong> no column depends on another non key column.</li></ul>
+<aside class="callout take"><b>Key takeaway</b><p>Normalize first for correctness, then denormalize deliberately where measurements prove a read is too slow.</p></aside>
+</div></section><section class="module reveal lv-i" id="m10"><div class="mhead"><span class="num" aria-hidden="true">10</span><div><span class="badge">Module 10 · Intermediate</span><h2>Changing Structure: ALTER, Schemas, Sequences</h2></div></div><div class="body">
+<p>Real projects change. <code>ALTER TABLE</code> adds, renames or removes columns without recreating the table. A <strong>schema</strong> is a folder inside a database that groups tables. A <strong>sequence</strong> is a counter that hands out numbers (identity columns use one internally).</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">-- Add, rename, default and remove a column
+ALTER TABLE students ADD COLUMN phone TEXT;
+ALTER TABLE students RENAME COLUMN phone TO mobile;
+ALTER TABLE students ALTER COLUMN mobile SET DEFAULT '';
+ALTER TABLE students DROP COLUMN mobile;
+
+-- A schema groups tables like a folder
+CREATE SCHEMA library;
+CREATE TABLE library.books (id INT PRIMARY KEY, title TEXT NOT NULL);
+SET search_path TO library, public;
+
+-- A sequence is a counter
+CREATE SEQUENCE ticket_no START 1000;
+SELECT nextval('ticket_no');</code></pre></figure>
+<aside class="callout warn"><b>Caution</b><p><code>DROP COLUMN</code> and <code>DROP TABLE</code> delete data for good. On big tables, add new columns as nullable, backfill in batches, then add the constraint (see the production module).</p></aside>
+</div></section><section class="module reveal lv-i" id="m11"><div class="mhead"><span class="num" aria-hidden="true">11</span><div><span class="badge">Module 11 · Intermediate</span><h2>Subqueries, Set Operations, CASE</h2></div></div><div class="body">
+<p>A subquery is a query inside a query: <strong>scalar</strong> (one value), <code>IN</code> (a list) or <code>EXISTS</code> (is there a match). <code>EXISTS</code> stops at the first hit, so on large data it often beats <code>IN</code>.</p>
+<ul><li><code>UNION</code>: combine and remove duplicates. <code>UNION ALL</code>: combine and keep duplicates (faster).</li><li><code>INTERSECT</code>: rows present in both. <code>EXCEPT</code>: rows in the first only.</li></ul>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">-- Scalar subquery: students above the average GPA
+SELECT full_name, gpa
+FROM students
+WHERE gpa &gt; (SELECT avg(gpa) FROM students);
+
+-- EXISTS stops at the first match
+SELECT c.code
+FROM courses c
+WHERE EXISTS (SELECT 1 FROM enrollments e WHERE e.course_id = c.id);
+
+-- Set operation (assumes an alumni table with the same email column)
+SELECT email FROM students
+EXCEPT
+SELECT email FROM alumni;
+
+-- CASE is a conditional expression
+SELECT full_name,
+       CASE WHEN gpa &gt;= 3.7 THEN 'honours'
+            WHEN gpa &gt;= 2.0 THEN 'pass'
+            ELSE 'probation' END AS standing
+FROM students;</code></pre></figure>
+<aside class="callout take"><b>Key takeaway</b><p>Use <code>UNION ALL</code> whenever duplicates cannot occur or do not matter. Plain <code>UNION</code> pays for a sort or hash.</p></aside>
+</div></section><section class="module reveal lv-i" id="m12"><div class="mhead"><span class="num" aria-hidden="true">12</span><div><span class="badge">Module 12 · Intermediate</span><h2>Indexes and Query Plans</h2></div></div><div class="body">
+<p>Without an index PostgreSQL reads the whole table (<em>Seq Scan</em>). A <strong>B-tree</strong> index, the default, finds rows in logarithmic time and also serves sorting and range filters.</p>
+<div class="tbl"><table><thead><tr><th>Index</th><th>Best for</th></tr></thead><tbody><tr><td>B-tree</td><td>Equality, ranges, ORDER BY (default)</td></tr><tr><td>GIN</td><td>JSONB, arrays, full text search</td></tr><tr><td>GiST</td><td>Geometry, ranges, nearest neighbour</td></tr><tr><td>BRIN</td><td>Huge append only tables ordered by time</td></tr><tr><td>Hash</td><td>Equality only (rarely better than B-tree)</td></tr></tbody></table></div>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">-- Index foreign keys and columns used in WHERE, JOIN and ORDER BY
+CREATE INDEX idx_enroll_course ON enrollments (course_id);
+
+-- Partial index: smaller and faster for a common filter
+CREATE INDEX idx_students_top ON students (gpa DESC) WHERE gpa &gt;= 3.5;
+
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT student_id, grade FROM enrollments WHERE course_id = 42;</code></pre></figure>
+<p>Read the plan from the innermost line outward. Compare <code>Seq Scan</code> and <code>Index Scan</code>, the estimated and actual row counts, and the actual time. A big gap between estimate and actual usually means stale statistics: run <code>ANALYZE</code>.</p>
+<aside class="callout warn"><b>Caution</b><p>Every index speeds reads but slows writes and uses disk. Drop duplicate and unused indexes.</p></aside>
+</div></section><section class="module reveal lv-i" id="m13"><div class="mhead"><span class="num" aria-hidden="true">13</span><div><span class="badge">Module 13 · Intermediate</span><h2>Pattern Matching and Full Text Search</h2></div></div><div class="body">
+<p>There are three levels: <code>LIKE</code> and <code>ILIKE</code> with <code>%</code> wildcards, regular expressions with <code>~</code>, and <strong>full text search</strong>, which understands words, stemming (<em>indexes</em> matches <em>index</em>) and ranking.</p>
+<div class="tbl"><table><thead><tr><th>Tool</th><th>Use it for</th><th>Index</th></tr></thead><tbody><tr><td>LIKE, ILIKE</td><td>Simple patterns</td><td>B-tree helps only for 'abc%'; pg_trgm for '%abc%'</td></tr><tr><td>~ (regex)</td><td>Complex patterns</td><td>pg_trgm</td></tr><tr><td>tsvector @@ tsquery</td><td>Word search with ranking</td><td>GIN</td></tr></tbody></table></div>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">-- Simple pattern and regular expression matching
+SELECT full_name FROM students WHERE full_name ILIKE '%rahman%';
+SELECT email FROM students WHERE email ~ '^[a-z]+@uni\.edu$';
+
+-- Full text search with a generated column and a GIN index
+CREATE TABLE articles (
+    id    SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    body  TEXT NOT NULL,
+    tsv   tsvector GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || body)) STORED
+);
+CREATE INDEX idx_articles_tsv ON articles USING GIN (tsv);
+INSERT INTO articles (title, body) VALUES
+    ('Indexes', 'A B-tree index speeds up lookups'),
+    ('Joins', 'Combine rows from two tables');
+
+SELECT title, ts_rank(tsv, q) AS score
+FROM articles, websearch_to_tsquery('english', 'index lookup') AS q
+WHERE tsv @@ q
+ORDER BY score DESC;</code></pre></figure>
+<aside class="callout tip"><b>Tip</b><p>Keep the <code>tsvector</code> in a generated column and index it with GIN, as above, so searches stay fast.</p></aside>
+</div></section><section class="module reveal lv-i" id="m14"><div class="mhead"><span class="num" aria-hidden="true">14</span><div><span class="badge">Module 14 · Intermediate</span><h2>Transactions, MVCC and Locking</h2></div></div><div class="body">
+<p>A transaction groups statements so they succeed or fail together (<strong>ACID</strong>: atomicity, consistency, isolation, durability). PostgreSQL uses <strong>MVCC</strong>: each transaction sees a consistent snapshot, so readers never block writers.</p>
+<div class="tbl"><table><thead><tr><th>Isolation level</th><th>Behaviour</th></tr></thead><tbody><tr><td>READ COMMITTED (default)</td><td>Each statement sees data committed before it started</td></tr><tr><td>REPEATABLE READ</td><td>The whole transaction sees one snapshot</td></tr><tr><td>SERIALIZABLE</td><td>Behaves as if transactions ran one after another; retry on failure</td></tr></tbody></table></div>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">BEGIN;
+UPDATE accounts SET balance = balance - 500 WHERE id = 1;
+UPDATE accounts SET balance = balance + 500 WHERE id = 2;
+COMMIT;  -- or ROLLBACK to undo everything since BEGIN
+
+-- Lock a row while you decide what to do with it
+BEGIN ISOLATION LEVEL REPEATABLE READ;
+SELECT balance FROM accounts WHERE id = 1 FOR UPDATE;
+COMMIT;</code></pre></figure>
+<aside class="callout tip"><b>Tip</b><p>Keep transactions short. Long ones hold locks, block cleanup and bloat tables. Always take locks in a consistent order to avoid deadlocks.</p></aside>
+</div></section><section class="module reveal lv-a" id="m15"><div class="mhead"><span class="num" aria-hidden="true">15</span><div><span class="badge">Module 15 · Advanced</span><h2>Advanced SQL: CTEs, Windows, JSONB, Views</h2></div></div><div class="body">
+<p><strong>CTEs</strong> (<code>WITH</code>) name an intermediate result and keep complex queries readable. <strong>Window functions</strong> compute across related rows without collapsing them like <code>GROUP BY</code> does: <code>rank()</code>, <code>row_number()</code>, <code>lag()</code>, running sums.</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">-- CTE plus window function: top 3 grades per course
+WITH ranked AS (
+    SELECT course_id, student_id, grade,
+           rank() OVER (PARTITION BY course_id ORDER BY grade DESC) AS pos
+    FROM enrollments
+)
+SELECT course_id, student_id, grade
+FROM ranked
+WHERE pos &lt;= 3;</code></pre></figure>
+<h3>JSONB</h3>
+<p>Store flexible attributes next to relational columns, and index them with GIN.</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">ALTER TABLE students ADD COLUMN profile JSONB NOT NULL DEFAULT '{}';
+CREATE INDEX idx_students_profile ON students USING GIN (profile);
+
+SELECT full_name
+FROM students
+WHERE profile @&gt; '{"club": "robotics"}';</code></pre></figure>
+<h3>Views</h3>
+<p>A view saves a query. A <strong>materialized</strong> view saves its result, trading freshness for speed.</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">CREATE MATERIALIZED VIEW course_stats AS
+SELECT course_id, count(*) AS n, round(avg(grade),2) AS avg_grade
+FROM enrollments
+GROUP BY course_id;
+
+CREATE UNIQUE INDEX ON course_stats (course_id);
+REFRESH MATERIALIZED VIEW CONCURRENTLY course_stats;</code></pre></figure>
+</div></section><section class="module reveal lv-a" id="m16"><div class="mhead"><span class="num" aria-hidden="true">16</span><div><span class="badge">Module 16 · Advanced</span><h2>Recursive Queries and Hierarchies</h2></div></div><div class="body">
+<p>A <strong>recursive CTE</strong> repeats a query on its own output. It suits trees and graphs: org charts, category menus, folders, bills of materials. It joins two parts with <code>UNION ALL</code>: the <em>anchor</em> (starting rows) and the <em>recursive step</em> (finds the next level). It stops when the step returns no new rows.</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">CREATE TABLE staff (
+    id      INT PRIMARY KEY,
+    name    TEXT NOT NULL,
+    boss_id INT REFERENCES staff(id)
+);
+INSERT INTO staff VALUES (1,'Dean',NULL), (2,'Head of CS',1), (3,'Lecturer A',2), (4,'Lecturer B',2), (5,'Head of Math',1);
+
+WITH RECURSIVE chain AS (
+    SELECT id, name, boss_id, 0 AS depth
+    FROM staff
+    WHERE boss_id IS NULL
+    UNION ALL
+    SELECT s.id, s.name, s.boss_id, c.depth + 1
+    FROM staff s
+    JOIN chain c ON s.boss_id = c.id
+    WHERE c.depth &lt; 20
+)
+SELECT repeat('    ', depth) || name AS org_chart, depth
+FROM chain
+ORDER BY depth, id;</code></pre></figure>
+<aside class="callout warn"><b>Caution</b><p>Cyclic data (A reports to B, B reports to A) loops forever. Keep a depth limit like <code>WHERE c.depth &lt; 20</code>, or track visited ids in an array.</p></aside>
+</div></section><section class="module reveal lv-a" id="m17"><div class="mhead"><span class="num" aria-hidden="true">17</span><div><span class="badge">Module 17 · Advanced</span><h2>PL/pgSQL Programming</h2></div></div><div class="body">
+<p>PL/pgSQL adds variables, <code>IF</code>, loops and error handling to SQL. Use <strong>functions</strong> when a query needs a returned value, <strong>procedures</strong> (called with <code>CALL</code>) to run steps, and <code>DO</code> blocks for one off scripts.</p>
+<ul><li><code>DECLARE</code> variables and <code>SELECT ... INTO</code> to fill them.</li><li><code>IF</code>, <code>ELSIF</code>, <code>FOR ... LOOP</code> for control flow.</li><li><code>EXCEPTION WHEN ... THEN</code> to handle errors, <code>RAISE</code> to report them.</li></ul>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">CREATE OR REPLACE FUNCTION grade_letter(score NUMERIC) RETURNS TEXT
+LANGUAGE plpgsql IMMUTABLE AS $$
+BEGIN
+    IF score IS NULL THEN
+        RETURN NULL;
+    ELSIF score &gt;= 3.7 THEN
+        RETURN 'A';
+    ELSIF score &gt;= 3.0 THEN
+        RETURN 'B';
+    ELSE
+        RETURN 'C';
+    END IF;
+END;
+$$;
+
+SELECT full_name, grade_letter(gpa) AS letter FROM students;
+
+CREATE PROCEDURE enroll_student(p_student BIGINT, p_course BIGINT)
+LANGUAGE plpgsql AS $$
+DECLARE
+    seats INT;
+BEGIN
+    SELECT count(*) INTO seats FROM enrollments WHERE course_id = p_course;
+    IF seats &gt;= 30 THEN
+        RAISE EXCEPTION 'Course % is full', p_course;
+    END IF;
+    INSERT INTO enrollments (student_id, course_id) VALUES (p_student, p_course);
+EXCEPTION WHEN unique_violation THEN
+    RAISE NOTICE 'Student % is already enrolled', p_student;
+END;
+$$;
+
+CALL enroll_student(6, 1);
+CALL enroll_student(6, 1);</code></pre></figure>
+<aside class="callout take"><b>Key takeaway</b><p>Prefer set based SQL over row by row loops. One <code>UPDATE</code> usually beats a loop of updates. Use PL/pgSQL for logic that plain SQL cannot express.</p></aside>
+</div></section><section class="module reveal lv-a" id="m18"><div class="mhead"><span class="num" aria-hidden="true">18</span><div><span class="badge">Module 18 · Advanced</span><h2>Functions, Triggers, Partitioning</h2></div></div><div class="body">
+<p><strong>PL/pgSQL</strong> lets you run logic inside the database. A <strong>trigger</strong> calls a function automatically on <code>INSERT</code>, <code>UPDATE</code> or <code>DELETE</code>, which suits audit columns and small invariants.</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">ALTER TABLE students ADD COLUMN updated_at TIMESTAMPTZ NOT NULL DEFAULT now();
+
+CREATE FUNCTION touch_updated_at() RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+    NEW.updated_at := now();
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_students_touch
+BEFORE UPDATE ON students
+FOR EACH ROW EXECUTE FUNCTION touch_updated_at();</code></pre></figure>
+<h3>Partitioning</h3>
+<p>Split an ever growing table by range, list or hash. Queries that filter on the partition key touch only the relevant partitions, and old data can be detached or dropped instantly.</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">CREATE TABLE audit_log (
+    id        BIGINT GENERATED ALWAYS AS IDENTITY,
+    logged_at TIMESTAMPTZ NOT NULL,
+    payload   JSONB
+) PARTITION BY RANGE (logged_at);
+
+CREATE TABLE audit_log_2026_10 PARTITION OF audit_log
+FOR VALUES FROM ('2026-10-01') TO ('2026-11-01');</code></pre></figure>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">-- Keyset pagination: stays fast on huge tables, unlike large OFFSET values
+SELECT id, full_name
+FROM students
+WHERE id &gt; 1000
+ORDER BY id
+LIMIT 50;</code></pre></figure>
+<aside class="callout take"><b>Key takeaway</b><p>Do not load a whole large table into memory. Paginate with a keyset, stream with cursors and write in batches of a few hundred to a thousand rows.</p></aside>
+</div></section><section class="module reveal lv-a" id="m19"><div class="mhead"><span class="num" aria-hidden="true">19</span><div><span class="badge">Module 19 · Advanced</span><h2>Replication, Extensions, Tuning</h2></div></div><div class="body">
+<p><strong>Physical (streaming)</strong> replication copies the WAL of the whole cluster for hot standbys and failover. <strong>Logical</strong> replication sends changes of chosen tables, which helps with major version upgrades and data distribution.</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">-- Primary (postgresql.conf): wal_level = logical
+-- Publish selected tables
+CREATE PUBLICATION pub_students FOR TABLE students, courses;
+
+-- Subscriber: pull those changes continuously
+CREATE SUBSCRIPTION sub_students
+CONNECTION 'host=primary dbname=university user=repl'
+PUBLICATION pub_students;</code></pre></figure>
+<h3>Extensions</h3>
+<p>Extensions add features without forking the database: <code>pg_trgm</code> (fuzzy search), <code>pgcrypto</code>, <strong>PostGIS</strong> (geography), <code>pg_stat_statements</code> (query statistics), TimescaleDB (time series).</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX idx_students_name_trgm ON students USING GIN (full_name gin_trgm_ops);
+SELECT full_name FROM students WHERE full_name ILIKE '%rahm%';
+
+SHOW shared_buffers;
+ALTER SYSTEM SET work_mem = '32MB';
+SELECT pg_reload_conf();</code></pre></figure>
+<h3>First tuning knobs</h3>
+<ul><li><code>shared_buffers</code>: a common starting point is about 25% of RAM.</li><li><code>effective_cache_size</code>: tells the planner how much the OS can cache, often 50 to 75% of RAM.</li><li><code>work_mem</code>: per sort or hash step, so raise it carefully.</li><li><code>maintenance_work_mem</code>: speeds up VACUUM and index builds.</li><li><code>max_connections</code>: keep it low and use a pool.</li></ul>
+<aside class="callout warn"><b>Caution</b><p>Measure under the same load before and after every setting change. Tuning by guesswork often makes things worse.</p></aside>
+</div></section><section class="module reveal lv-a" id="m20"><div class="mhead"><span class="num" aria-hidden="true">20</span><div><span class="badge">Module 20 · Advanced</span><h2>Security, Backup and Production</h2></div></div><div class="body">
+<p>Use <strong>roles</strong> with the least privilege each application needs. Never let an app connect as a superuser.</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">CREATE ROLE app_user LOGIN PASSWORD 'change_me';
+GRANT CONNECT ON DATABASE university TO app_user;
+GRANT SELECT, INSERT, UPDATE ON students TO app_user;
+REVOKE ALL ON enrollments FROM PUBLIC;</code></pre></figure>
+<h3>Backup and recovery</h3>
+<p><code>pg_dump</code> gives logical backups. For point in time recovery combine a base backup with archived <strong>WAL</strong>. Streaming replication keeps a hot standby, which can also serve read only traffic.</p>
+<figure class="code"><figcaption><span>Shell</span><span class="fa"><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sh"># Compressed custom format dump
+pg_dump -Fc -d university -f university.dump
+
+# Restore into a separate copy first
+createdb university_copy
+pg_restore -d university_copy university.dump</code></pre></figure>
+<h3>Running it for real</h3>
+<ul><li>Put <strong>PgBouncer</strong> or another pool in front of the server.</li><li>Leave <strong>autovacuum</strong> on, and watch table bloat.</li><li>Track slow queries with <code>pg_stat_statements</code>.</li><li>Migrate big tables without long locks.</li></ul>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">-- Safe migration on a big table: nullable column, batched backfill, then constraint
+ALTER TABLE students ADD COLUMN phone TEXT;
+UPDATE students SET phone = '' WHERE id BETWEEN 1 AND 1000 AND phone IS NULL;
+ALTER TABLE students ADD CONSTRAINT phone_required CHECK (phone IS NOT NULL) NOT VALID;
+ALTER TABLE students VALIDATE CONSTRAINT phone_required;
+
+-- Find the slowest statements (needs the pg_stat_statements extension)
+SELECT query, calls, round(mean_exec_time::numeric, 2) AS avg_ms
+FROM pg_stat_statements
+ORDER BY mean_exec_time DESC
+LIMIT 5;</code></pre></figure>
+<aside class="callout warn"><b>Caution</b><p>Destructive commands such as <code>DROP</code> and <code>pg_restore --clean</code> cannot be undone. Restore into a copy, verify, then switch.</p></aside>
+</div></section><section class="module reveal lv-a" id="m21"><div class="mhead"><span class="num" aria-hidden="true">21</span><div><span class="badge">Module 21 · Advanced</span><h2>Row Level Security</h2></div></div><div class="body">
+<p><code>GRANT</code> controls which <em>tables</em> a role can touch. <strong>Row level security</strong> (RLS) controls which <em>rows</em>, enforced by the database itself. It is the standard tool for multi tenant apps where every customer must see only their own rows. A <strong>policy</strong> is the rule: <code>USING</code> filters rows that can be read, updated or deleted, and <code>WITH CHECK</code> validates rows being written.</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">CREATE TABLE notes (
+    id    SERIAL PRIMARY KEY,
+    owner TEXT NOT NULL DEFAULT current_user,
+    body  TEXT NOT NULL
+);
+
+ALTER TABLE notes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE notes FORCE ROW LEVEL SECURITY;
+
+CREATE POLICY own_notes ON notes
+    USING (owner = current_user)
+    WITH CHECK (owner = current_user);</code></pre></figure>
+<aside class="callout warn"><b>Caution</b><p>Superusers and roles with <code>BYPASSRLS</code> ignore policies, and table owners do too unless <code>FORCE ROW LEVEL SECURITY</code> is on. Always test with an ordinary role.</p></aside>
+</div></section><section class="module reveal lv-a" id="m22"><div class="mhead"><span class="num" aria-hidden="true">22</span><div><span class="badge">Module 22 · Advanced</span><h2>Modern PostgreSQL: Docker Compose and pgvector</h2></div></div><div class="body">
+<p>A <code>docker-compose.yml</code> gives every teammate the same database with one command, <code>docker compose up -d</code>. The <strong>pgvector</strong> extension stores <em>embeddings</em> (lists of numbers produced by AI models) in a <code>vector</code> column and finds the nearest ones. It is the base of semantic search and RAG apps.</p>
+<figure class="code"><figcaption><span>Shell</span><span class="fa"><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sh"># docker-compose.yml
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: university
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:</code></pre></figure>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">Try ▶</button><button class="copy" type="button">Copy</button></span></figcaption><pre><code data-lang="sql">CREATE EXTENSION IF NOT EXISTS vector;
+CREATE TABLE docs (
+    id        BIGSERIAL PRIMARY KEY,
+    content   TEXT NOT NULL,
+    embedding vector(3)
+);
+INSERT INTO docs (content, embedding)
+VALUES ('cat', '[1,0,0]'), ('kitten', '[0.9,0.1,0]'), ('car', '[0,0,1]');
+CREATE INDEX ON docs USING hnsw (embedding vector_cosine_ops);
+
+-- Nearest two documents by cosine distance
+SELECT content FROM docs ORDER BY embedding &lt;=&gt; '[1,0,0]' LIMIT 2;</code></pre></figure>
+<div class="tbl"><table><thead><tr><th>Operator</th><th>Distance</th></tr></thead><tbody><tr><td>&lt;-&gt;</td><td>Euclidean (L2)</td></tr><tr><td>&lt;=&gt;</td><td>Cosine</td></tr><tr><td>&lt;#&gt;</td><td>Negative inner product</td></tr></tbody></table></div>
+<aside class="callout tip"><b>Tip</b><p>Add an HNSW or IVFFlat index once the table is large. The browser Practice Lab has no pgvector or pg_trgm, so run those two examples in Docker.</p></aside>
+</div></section><section class="module reveal lv-r" id="m23"><div class="mhead"><span class="num" aria-hidden="true">23</span><div><span class="badge">Module 23 · Reference</span><h2>Cheat Sheet, Glossary, Next Steps</h2></div></div><div class="body">
+<h3>SQL quick reference</h3>
+<div class="tbl"><table><thead><tr><th>Task</th><th>Statement</th></tr></thead><tbody><tr><td>Create a table</td><td>CREATE TABLE t (id INT PRIMARY KEY, name TEXT);</td></tr><tr><td>Insert</td><td>INSERT INTO t (id, name) VALUES (1, 'a');</td></tr><tr><td>Read</td><td>SELECT name FROM t WHERE id = 1;</td></tr><tr><td>Update</td><td>UPDATE t SET name = 'b' WHERE id = 1;</td></tr><tr><td>Delete</td><td>DELETE FROM t WHERE id = 1;</td></tr><tr><td>Join</td><td>SELECT a.x, b.y FROM a JOIN b ON b.a_id = a.id;</td></tr><tr><td>Aggregate</td><td>SELECT k, count(*) FROM t GROUP BY k;</td></tr><tr><td>Index</td><td>CREATE INDEX idx_t_name ON t (name);</td></tr><tr><td>Transaction</td><td>BEGIN; ... COMMIT;</td></tr><tr><td>Plan</td><td>EXPLAIN (ANALYZE) SELECT ...;</td></tr></tbody></table></div>
+<h3>psql commands</h3>
+<div class="tbl"><table><thead><tr><th>Command</th><th>Does</th></tr></thead><tbody><tr><td>\l</td><td>List databases</td></tr><tr><td>\c name</td><td>Connect to a database</td></tr><tr><td>\dt</td><td>List tables</td></tr><tr><td>\d table</td><td>Describe a table</td></tr><tr><td>\du</td><td>List roles</td></tr><tr><td>\dn</td><td>List schemas</td></tr><tr><td>\x</td><td>Toggle expanded output</td></tr><tr><td>\timing</td><td>Show query time</td></tr><tr><td>\i file.sql</td><td>Run a file</td></tr><tr><td>\q</td><td>Quit</td></tr></tbody></table></div>
+<h3>Glossary</h3>
+<div class="tbl"><table><thead><tr><th>Term</th><th>Meaning</th></tr></thead><tbody><tr><td>Row, column</td><td>One record, and one named field of every record</td></tr><tr><td>Primary key</td><td>Column(s) that uniquely identify a row</td></tr><tr><td>Foreign key</td><td>Column that points to a row in another table</td></tr><tr><td>Index</td><td>Extra structure that makes lookups fast</td></tr><tr><td>Transaction</td><td>A group of statements that succeed or fail together</td></tr><tr><td>MVCC</td><td>Each transaction sees a snapshot, readers never block writers</td></tr><tr><td>WAL</td><td>Write ahead log used for durability, recovery and replication</td></tr><tr><td>VACUUM</td><td>Cleans dead row versions left by updates and deletes</td></tr><tr><td>Schema</td><td>A namespace (folder) of tables inside a database</td></tr><tr><td>View</td><td>A saved query that looks like a table</td></tr><tr><td>Role</td><td>A user or group with privileges</td></tr><tr><td>CTE</td><td>A named temporary result inside one query (WITH)</td></tr><tr><td>Replica</td><td>A copy of the server kept in sync from the primary</td></tr></tbody></table></div>
+<h3>Next steps</h3>
+<ul><li>Rebuild the university schema from memory in the Practice Lab, then add your own tables.</li><li>Read the official PostgreSQL documentation for details of any command.</li><li>Practise <code>EXPLAIN ANALYZE</code> on your own slow queries.</li><li>Build a small app (any language) that talks to PostgreSQL through a driver.</li></ul>
+<aside class="callout take"><b>Key takeaway</b><p>You now know the full path: concepts, SQL, design, performance, programmability and operations. Skill comes from building, so keep a project going.</p></aside>
+</div></section>
+  <footer class="foot"><span>Examples use a fictional schema: students, courses, enrollments.</span><span>English edition · <a href="#top">Back to top</a></span></footer>
+</main>
+</div>
+<aside class="lab" id="lab" data-t="{&quot;loading&quot;: &quot;Loading PostgreSQL...&quot;, &quot;ready&quot;: &quot;PostgreSQL ready&quot;, &quot;offline&quot;: &quot;Offline&quot;, &quot;offlineMsg&quot;: &quot;The lab downloads a real PostgreSQL (WebAssembly) from the internet the first time. Connect to the internet and press Run again.&quot;, &quot;metaMsg&quot;: &quot;Supported shortcuts: \\dt (list tables) and \\d table_name (describe a table). Other psql commands only work in the real psql.&quot;, &quot;rows&quot;: &quot;rows&quot;, &quot;confirm&quot;: &quot;Delete all tables in the lab?&quot;, &quot;resetDone&quot;: &quot;Lab database cleared.&quot;}" aria-label="Practice Lab"><div class="labbar"><b>Practice Lab</b><span class="status" id="lab-status" role="status"></span><span class="spacer"></span><button class="btn sm" id="lab-sample" type="button">Load sample data</button><button class="btn sm" id="lab-reset" type="button">Reset</button><button class="btn sm" id="lab-close" type="button" aria-label="Close">✕</button></div><div class="labgrid"><div class="ed"><textarea id="lab-sql" spellcheck="false" placeholder="Write any PostgreSQL here..."></textarea><div class="acts"><button class="btn primary sm" id="lab-run" type="button">Run ▶</button><span class="hint">Ctrl + Enter to run</span></div></div><div class="out" id="lab-out" aria-live="polite"></div></div></aside>
+<script src="assets/app.js"></script>
+<script src="assets/lab.js"></script>
+</body>
+</html>

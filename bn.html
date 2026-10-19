@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="bn" data-copied="কপি হয়েছে">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PostgreSQL, শূন্য থেকে অ্যাডভান্সড</title>
+<meta name="description" content="তেইশটি মডিউলের এই ক্লাস ধরে নেয় আপনি কিছুই জানেন না। ডেটাবেস কী থেকে শুরু করে রিকার্সিভ কুয়েরি, PL/pgSQL, রো লেভেল সিকিউরিটি, রেপ্লিকেশন ও pgvector পর্যন্ত সব আছে, সঙ্গে ব্রাউজারেই আসল PostgreSQL-এর প্র্যাকটিস ল্যাব।">
+<script src="assets/theme.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Hind+Siliguri:wght@500;700&family=Space+Grotesk:wght@500;700&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
+</head>
+<body>
+<div class="progress" aria-hidden="true"></div>
+<header class="topbar">
+  <button class="btn" id="menu" type="button" aria-label="মেনু">☰</button>
+  <a class="brand" href="#top"><span class="mark">Pg</span><span>PostgreSQL</span></a>
+  <span class="spacer"></span>
+  <a class="btn" href="index.html" hreflang="en">English</a>
+  <button class="btn" id="lab-open" type="button">▶ প্র্যাকটিস ল্যাব</button>
+  <button class="btn" id="theme" type="button" aria-label="থিম">◐<span class="lbl">থিম</span></button>
+</header>
+<div class="ticker" aria-hidden="true"><div><span>SELECT</span><span>★</span><span>JOIN</span><span>★</span><span>INDEX</span><span>★</span><span>MVCC</span><span>★</span><span>WAL</span><span>★</span><span>CTE</span><span>★</span><span>JSONB</span><span>★</span><span>VACUUM</span><span>★</span><span>TRIGGER</span><span>★</span><span>PARTITION</span><span>★</span><span>EXPLAIN</span><span>★</span><span>COMMIT</span><span>★</span><span>SELECT</span><span>★</span><span>JOIN</span><span>★</span><span>INDEX</span><span>★</span><span>MVCC</span><span>★</span><span>WAL</span><span>★</span><span>CTE</span><span>★</span><span>JSONB</span><span>★</span><span>VACUUM</span><span>★</span><span>TRIGGER</span><span>★</span><span>PARTITION</span><span>★</span><span>EXPLAIN</span><span>★</span><span>COMMIT</span><span>★</span></div></div>
+<div class="scrim"></div>
+<div class="shell">
+<nav class="syllabus" aria-label="সিলেবাস">
+  <h2>সিলেবাস</h2>
+  <input class="search" id="q" type="search" placeholder="মডিউল খুঁজুন" aria-label="মডিউল খুঁজুন">
+  <div class="group lv-b">ভিত্তি</div><ol class="lv-b"><li><a href="#m01"><b>01</b><span>শুরু এখানে: ক্লাস জিরো</span></a></li><li><a href="#m02"><b>02</b><span>ভূমিকা ও সেটআপ</span></a></li><li><a href="#m03"><b>03</b><span>Windows-এ PostgreSQL ইনস্টল</span></a></li><li><a href="#m04"><b>04</b><span>SQL-এর মূল কথা: প্রথম স্টেটমেন্ট</span></a></li><li><a href="#m05"><b>05</b><span>টেবিল ও ডেটা টাইপ</span></a></li><li><a href="#m06"><b>06</b><span>CRUD: তৈরি, পড়া, হালনাগাদ, মোছা</span></a></li><li><a href="#m07"><b>07</b><span>কুয়েরি: ফিল্টার, জয়েন, অ্যাগ্রিগেট</span></a></li><li><a href="#m08"><b>08</b><span>ফাংশন ও এক্সপ্রেশন</span></a></li></ol><div class="group lv-i">মধ্যম স্তর</div><ol class="lv-i"><li><a href="#m09"><b>09</b><span>কনস্ট্রেইন্ট, রিলেশনশিপ, নরমালাইজেশন</span></a></li><li><a href="#m10"><b>10</b><span>কাঠামো বদল: ALTER, স্কিমা, সিকোয়েন্স</span></a></li><li><a href="#m11"><b>11</b><span>সাবকুয়েরি, সেট অপারেশন, CASE</span></a></li><li><a href="#m12"><b>12</b><span>ইনডেক্স ও কুয়েরি প্ল্যান</span></a></li><li><a href="#m13"><b>13</b><span>প্যাটার্ন ম্যাচিং ও ফুল টেক্সট সার্চ</span></a></li><li><a href="#m14"><b>14</b><span>ট্রানজ্যাকশন, MVCC ও লকিং</span></a></li></ol><div class="group lv-a">অ্যাডভান্সড</div><ol class="lv-a"><li><a href="#m15"><b>15</b><span>অ্যাডভান্সড SQL: CTE, উইন্ডো, JSONB, ভিউ</span></a></li><li><a href="#m16"><b>16</b><span>রিকার্সিভ কুয়েরি ও হায়ারার্কি</span></a></li><li><a href="#m17"><b>17</b><span>PL/pgSQL প্রোগ্রামিং</span></a></li><li><a href="#m18"><b>18</b><span>ফাংশন, ট্রিগার, পার্টিশনিং</span></a></li><li><a href="#m19"><b>19</b><span>রেপ্লিকেশন, এক্সটেনশন, টিউনিং</span></a></li><li><a href="#m20"><b>20</b><span>নিরাপত্তা, ব্যাকআপ ও প্রোডাকশন</span></a></li><li><a href="#m21"><b>21</b><span>রো লেভেল সিকিউরিটি</span></a></li><li><a href="#m22"><b>22</b><span>আধুনিক PostgreSQL: Docker Compose ও pgvector</span></a></li></ol><div class="group lv-r">রেফারেন্স</div><ol class="lv-r"><li><a href="#m23"><b>23</b><span>চিট শিট, শব্দকোষ, পরের ধাপ</span></a></li></ol>
+</nav>
+<main id="top">
+  <section class="hero">
+    <div>
+      <div class="eyebrow">ওপেন কোর্সওয়্যার · ডেটাবেস সিস্টেম</div>
+      <h1>PostgreSQL,<br><em>শূন্য</em> থেকে অ্যাডভান্সড</h1>
+      <p class="lead">তেইশটি মডিউলের এই ক্লাস ধরে নেয় আপনি কিছুই জানেন না। ডেটাবেস কী থেকে শুরু করে রিকার্সিভ কুয়েরি, PL/pgSQL, রো লেভেল সিকিউরিটি, রেপ্লিকেশন ও pgvector পর্যন্ত সব আছে, সঙ্গে ব্রাউজারেই আসল PostgreSQL-এর প্র্যাকটিস ল্যাব।</p>
+      <div class="cta"><a class="btn primary" href="#m01">মডিউল ০১ শুরু করুন →</a><button class="btn" id="lab-open2" type="button">▶ প্র্যাকটিস ল্যাব</button></div>
+    </div>
+    <svg class="schema" viewBox="0 0 420 340" role="img" aria-label="students and courses linked by enrollments">
+<path class="ln" d="M91 128 V178 H175 V222"/><path class="ln" d="M329 128 V178 H245 V222"/>
+<text x="97" y="160" class="mu">1</text><text x="160" y="212" class="mu">N</text><text x="335" y="160" class="mu">1</text><text x="250" y="212" class="mu">N</text>
+<g class="t"><rect class="tb" x="16" y="20" width="150" height="108" rx="8"/><rect class="th" x="16" y="20" width="150" height="22"/><text class="hd" x="28" y="36">students</text><text x="28" y="62">id <tspan class="mu">PK</tspan></text><text x="28" y="82">full_name</text><text x="28" y="102">email <tspan class="mu">UNIQUE</tspan></text><text x="28" y="120">gpa</text></g>
+<g class="t"><rect class="tb" x="254" y="20" width="150" height="108" rx="8"/><rect class="th" x="254" y="20" width="150" height="22"/><text class="hd" x="266" y="36">courses</text><text x="266" y="62">id <tspan class="mu">PK</tspan></text><text x="266" y="82">code <tspan class="mu">UNIQUE</tspan></text><text x="266" y="102">title</text><text x="266" y="120">credits</text></g>
+<g class="t"><rect class="tb" x="135" y="222" width="150" height="92" rx="8"/><rect class="th" x="135" y="222" width="150" height="22"/><text class="hd" x="147" y="238">enrollments</text><text x="147" y="266">student_id <tspan class="mu">FK</tspan></text><text x="147" y="286">course_id <tspan class="mu">FK</tspan></text><text x="147" y="306">grade</text></g>
+</svg>
+  </section>
+  <dl class="meta"><div><dt>সময়</dt><dd>≈ ৮০ ঘণ্টা</dd></div><div><dt>মডিউল</dt><dd>২৩</dd></div><div><dt>পূর্বশর্ত</dt><dd>একেবারেই কিছু নয়</dd></div><div><dt>ভার্সন</dt><dd>PostgreSQL 16+</dd></div></dl>
+  <ol class="track"><li class="lv-b"><b>ভিত্তি</b><span>মডিউল ০১ থেকে ০৮</span><p>ডেটাবেস কী, Windows-এ ইনস্টল, SQL-এর মূল কথা, টেবিল, CRUD, কুয়েরি ও এক্সপ্রেশন।</p></li><li class="lv-i"><b>মধ্যম স্তর</b><span>মডিউল ০৯ থেকে ১৪</span><p>কনস্ট্রেইন্ট, ALTER, সাবকুয়েরি, ইনডেক্স, ফুল টেক্সট সার্চ ও ট্রানজ্যাকশন।</p></li><li class="lv-a"><b>অ্যাডভান্সড</b><span>মডিউল ১৫ থেকে ২২</span><p>উইন্ডো ফাংশন, রিকার্সন, PL/pgSQL, ট্রিগার, পার্টিশনিং, রেপ্লিকেশন, নিরাপত্তা, RLS ও pgvector।</p></li></ol>
+  <section class="module reveal lv-b" id="m01"><div class="mhead"><span class="num" aria-hidden="true">01</span><div><span class="badge">মডিউল 01 · প্রাথমিক</span><h2>শুরু এখানে: ক্লাস জিরো</h2></div></div><div class="body">
+<p>এই কোর্স ধরে নিয়েছে আপনি <strong>কখনো কোড লেখেননি এবং ডেটাবেসের নামও শোনেননি</strong>। ক্লাসের মতো একটার পর একটা মডিউল পড়ুন। প্রতিটির পর উপরের বারের <strong>প্র্যাকটিস ল্যাব</strong> খুলে উদাহরণগুলো নিজে টাইপ করুন।</p>
+<h3>ডেটা কী?</h3>
+<p>ডেটা মানে লিখে রাখা তথ্য: শিক্ষার্থীর নাম, পণ্যের দাম, আজকের তাপমাত্রা। ব্যাংকিং, সোশ্যাল মিডিয়া, অনলাইন শপিং, সব অ্যাপ সারাদিন ডেটা জমা রাখে ও পড়ে।</p>
+<h3>ডেটাবেস কী?</h3>
+<p>ডেটাবেস হলো ডেটা গুছিয়ে ও নিরাপদে রাখার জায়গা, যাতে দ্রুত খুঁজে পাওয়া যায়। স্কুলের অফিসের কথা ভাবুন। কাগজের এলোমেলো স্তূপে কিছু খোঁজা কঠিন, কিন্তু লেবেল দেওয়া আলমারিসহ <em>ফাইলিং সিস্টেমে</em> সহজ। এই ফাইলিং সিস্টেম চালানো, অর্থাৎ কাগজ রাখা, খোঁজা ও রক্ষা করার প্রোগ্রামকে বলে <strong>DBMS</strong> (ডেটাবেস ম্যানেজমেন্ট সিস্টেম)। PostgreSQL তেমনই একটি।</p>
+<h3>টেবিল কী?</h3>
+<p>রিলেশনাল ডেটাবেসের ডেটা থাকে <strong>টেবিলে</strong>, স্প্রেডশিটের একটি শিটের মতো। <strong>কলাম</strong> হলো শিরোনাম, আর প্রতিটি <strong>সারি</strong> একটি রেকর্ড, এখানে একজন শিক্ষার্থী।</p>
+<div class="tbl"><table><thead><tr><th>id</th><th>full_name</th><th>email</th><th>gpa</th></tr></thead><tbody><tr><td>1</td><td>Ayesha Rahman</td><td>ayesha@uni.edu</td><td>3.80</td></tr><tr><td>2</td><td>Tanvir Hasan</td><td>tanvir@uni.edu</td><td>3.40</td></tr></tbody></table></div>
+<h3>SQL কী?</h3>
+<p><strong>SQL</strong> (স্ট্রাকচার্ড কুয়েরি ল্যাঙ্গুয়েজ) দিয়ে ডেটাবেসের সঙ্গে কথা বলা হয়। আপনি বলেন <em>কী</em> চান, ডেটাবেস নিজে ঠিক করে <em>কীভাবে</em> দেবে। <code>SELECT full_name FROM students</code> প্রায় ইংরেজির মতো: "students থেকে পুরো নামগুলো দেখাও"।</p>
+<h3>PostgreSQL কী?</h3>
+<p>PostgreSQL (উচ্চারণ "পোস্টগ্রেস") একটি বিনামূল্যের ওপেন সোর্স DBMS। এটি <strong>সার্ভার</strong> হিসেবে চলে। রেস্তোরাঁর মতো: আপনি (<strong>ক্লায়েন্ট</strong>) ওয়েটারকে অর্ডার (SQL) দেন, রান্নাঘর (সার্ভার) তৈরি করে ফলাফল পাঠায়।</p>
+<h3>কীভাবে পড়বেন</h3>
+<ul><li>সবুজ ব্যাজ প্রাথমিক, হলুদ মধ্যম, গোলাপি অ্যাডভান্সড। লাফিয়ে এগোবেন না।</li><li>প্রতিটি উদাহরণ নিজে টাইপ করুন। কোড ব্লকে <strong>চেষ্টা করুন</strong> চাপলে সেটি ল্যাবে চলে যাবে।</li><li>ভুল হওয়া স্বাভাবিক ও কাজের। ইচ্ছা করে ভাঙুন।</li></ul>
+<aside class="callout take"><b>মূল কথা</b><p>ডেটাবেস = গোছানো টেবিল। SQL = ডেটা চাওয়ার ভাষা। PostgreSQL = যে প্রোগ্রাম টেবিল রাখে ও SQL বোঝে।</p></aside>
+</div></section><section class="module reveal lv-b" id="m02"><div class="mhead"><span class="num" aria-hidden="true">02</span><div><span class="badge">মডিউল 02 · প্রাথমিক</span><h2>ভূমিকা ও সেটআপ</h2></div></div><div class="body">
+<p>PostgreSQL একটি ওপেন সোর্স <strong>অবজেক্ট-রিলেশনাল ডেটাবেস</strong>, ৩০ বছরের বেশি সময় ধরে উন্নয়নাধীন। সঠিকতা, কঠোর SQL স্ট্যান্ডার্ড সমর্থন এবং সম্প্রসারণযোগ্যতার জন্য এটি সুপরিচিত: JSONB, ফুল টেক্সট সার্চ, PostGIS, কাস্টম টাইপ ও এক্সটেনশন।</p>
+<h3>ডেটা কীভাবে সাজানো থাকে</h3>
+<ol class="hier"><li><b>ক্লাস্টার</b><span>একটি চলমান সার্ভার</span></li><li><b>ডেটাবেস</b><span>আলাদা সংগ্রহ</span></li><li><b>স্কিমা</b><span>নেমস্পেস, ডিফল্ট <code>public</code></span></li><li><b>টেবিল</b><span>সারি ও কলাম</span></li></ol>
+<figure class="code"><figcaption><span>Shell</span><span class="fa"><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sh"># Debian or Ubuntu
+sudo apt install postgresql
+sudo -u postgres psql
+
+# macOS (Homebrew)
+brew install postgresql@16
+brew services start postgresql@16
+psql postgres</code></pre></figure>
+<p><code>psql</code> দিয়ে সংযোগ করে একটি ডেটাবেস বানান এবং ঘুরে দেখুন:</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">CREATE DATABASE university;
+-- Meta commands work only inside psql.
+-- \c connect, \l list databases, \dt list tables, \d describe, \q quit
+\c university</code></pre></figure>
+<aside class="callout tip"><b>পরামর্শ</b><p>শুরুতে <code>psql</code> দিয়ে শিখুন। pgAdmin বা DBeaver-এর মতো GUI টুল মূল ধারণা পরিষ্কার হলে ব্যবহার করা সহজ হয়।</p></aside>
+</div></section><section class="module reveal lv-b" id="m03"><div class="mhead"><span class="num" aria-hidden="true">03</span><div><span class="badge">মডিউল 03 · প্রাথমিক</span><h2>Windows-এ PostgreSQL ইনস্টল</h2></div></div><div class="body">
+<p>অফিসিয়াল ইনস্টলার প্রায় ৩০০ MB, এতে সার্ভার, <code>psql</code> কমান্ড লাইন ও pgAdmin অ্যাপ থাকে।</p>
+<ol class="plain">
+<li><strong>postgresql.org/download/windows</strong> খুলে <em>Download the installer</em> চাপুন। Windows x86 64-এর জন্য সবচেয়ে নতুন ভার্সন (১৬ বা তার বেশি) নিন।</li>
+<li>নামানো <code>.exe</code> চালান এবং অ্যাডমিন অনুমতি দিন।</li>
+<li>ডিফল্ট ফোল্ডার রাখুন এবং এই কম্পোনেন্টগুলো টিক দেওয়া রাখুন: PostgreSQL Server, pgAdmin 4, Command Line Tools।</li>
+<li>সুপারইউজার <code>postgres</code>-এর জন্য একটি <strong>পাসওয়ার্ড</strong> দিন এবং কোথাও লিখে রাখুন। হারালে ফেরত পাওয়া কঠিন।</li>
+<li>ডিফল্ট পোর্ট <code>5432</code> ও ডিফল্ট লোকেল রেখে শেষ করুন।</li>
+<li>Start মেনু থেকে <strong>SQL Shell (psql)</strong> চালান। ডিফল্ট মানতে (সার্ভার, ডেটাবেস, পোর্ট, ইউজার) চারবার Enter চাপুন, তারপর পাসওয়ার্ড লিখুন। টাইপ করার সময় পাসওয়ার্ড দেখা যায় না, এটা স্বাভাবিক।</li>
+<li>ইনস্টল ঠিক হয়েছে কি না পরীক্ষা করুন:</li>
+</ol>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">SELECT version();
+CREATE DATABASE university;
+\c university</code></pre></figure>
+<h3>অন্য উপায়</h3>
+<p>PowerShell থেকে <code>winget</code> দিয়ে ইনস্টল করা যায়, অথবা কিছু ইনস্টল না করে <strong>Docker</strong>-এ PostgreSQL চালানো যায়।</p>
+<figure class="code"><figcaption><span>Shell</span><span class="fa"><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sh"># Optional: install with winget (PowerShell as Administrator)
+winget install PostgreSQL.PostgreSQL.16
+
+# Connect from PowerShell after adding C:\Program Files\PostgreSQL\16\bin to PATH
+psql -U postgres -h localhost</code></pre></figure>
+<figure class="code"><figcaption><span>Shell</span><span class="fa"><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sh">docker run --name pg -e POSTGRES_PASSWORD=secret -p 5432:5432 -d postgres:16
+docker exec -it pg psql -U postgres</code></pre></figure>
+<h3>সমস্যা হলে</h3>
+<div class="tbl"><table><thead><tr><th>সমস্যা</th><th>সমাধান</th></tr></thead><tbody><tr><td>psql is not recognized</td><td>Start মেনু থেকে SQL Shell (psql) চালান, অথবা PostgreSQL-এর bin ফোল্ডার PATH-এ যোগ করুন</td></tr><tr><td>password authentication failed</td><td>postgres-এর পাসওয়ার্ড ভুল হয়েছে। ইনস্টলের সময় দেওয়াটি ব্যবহার করুন</td></tr><tr><td>port 5432 already in use</td><td>আরেকটি PostgreSQL চলছে। সেটি বন্ধ করুন, বা ইনস্টলে অন্য পোর্ট বাছুন</td></tr><tr><td>পাসওয়ার্ড টাইপ করলে কিছু দেখা যায় না</td><td>এটা স্বাভাবিক, শেল তা লুকায়। টাইপ করে Enter চাপুন</td></tr></tbody></table></div>
+<aside class="callout tip"><b>পরামর্শ</b><p>এখনই কিছু ইনস্টল করতে চান না? <strong>প্র্যাকটিস ল্যাব</strong> আপনার ব্রাউজারের ভেতরেই আসল PostgreSQL চালায়।</p></aside>
+</div></section><section class="module reveal lv-b" id="m04"><div class="mhead"><span class="num" aria-hidden="true">04</span><div><span class="badge">মডিউল 04 · প্রাথমিক</span><h2>SQL-এর মূল কথা: প্রথম স্টেটমেন্ট</h2></div></div><div class="body">
+<p>আসল কুয়েরির আগে ব্যাকরণ শিখুন। SQL স্টেটমেন্ট একটি বাক্যের মতো: <strong>কিওয়ার্ড</strong> বলে কী করতে হবে, বাকিটা বলে কীসের ওপর।</p>
+<ul><li>প্রতিটি স্টেটমেন্ট সেমিকোলন <code>;</code> দিয়ে শেষ হয়।</li><li><code>SELECT</code>-এর মতো কিওয়ার্ড ছোট বা বড় হাতের, দুই-ই চলে। রীতি: কিওয়ার্ড বড় হাতের, নাম ছোট হাতের।</li><li>লেখা থাকে <strong>সিঙ্গেল কোটে</strong>, যেমন <code>'এভাবে'</code>। ডাবল কোট অস্বাভাবিক নামের জন্য।</li><li>মন্তব্য: <code>-- এক লাইন</code> বা <code>/* অনেক লাইন */</code>।</li><li>স্পেস ও নতুন লাইন গুরুত্বপূর্ণ নয়, তাই পড়তে সুবিধা হয় এমনভাবে সাজান।</li><li>নাম দিন <code>lowercase_with_underscores</code> রীতিতে, স্পেস ছাড়া।</li></ul>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">-- Your first statements
+SELECT 'Hello, PostgreSQL!';
+SELECT 2 + 3 * 4 AS answer;
+SELECT current_date, now();
+SELECT 'Ayesha' || ' ' || 'Rahman' AS full_name;</code></pre></figure>
+<h3>স্টেটমেন্টের গঠন</h3>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">SELECT full_name FROM students WHERE gpa &gt; 3.5;</code></pre></figure>
+<div class="tbl"><table><thead><tr><th>অংশ</th><th>অর্থ</th></tr></thead><tbody><tr><td>SELECT full_name</td><td>কোন কলাম দেখাবে</td></tr><tr><td>FROM students</td><td>কোন টেবিল পড়বে</td></tr><tr><td>WHERE gpa > 3.5</td><td>কোন সারি রাখবে</td></tr><tr><td>;</td><td>স্টেটমেন্ট শেষ</td></tr></tbody></table></div>
+<h3>পাঁচ ধরনের কমান্ড</h3>
+<div class="tbl"><table><thead><tr><th>গ্রুপ</th><th>কমান্ড</th><th>কাজ</th></tr></thead><tbody><tr><td>DDL</td><td>CREATE, ALTER, DROP</td><td>কাঠামো তৈরি ও বদল</td></tr><tr><td>DML</td><td>INSERT, UPDATE, DELETE</td><td>ডেটা বদল</td></tr><tr><td>DQL</td><td>SELECT</td><td>ডেটা পড়া</td></tr><tr><td>DCL</td><td>GRANT, REVOKE</td><td>অনুমতি নিয়ন্ত্রণ</td></tr><tr><td>TCL</td><td>BEGIN, COMMIT, ROLLBACK</td><td>পরিবর্তন নিরাপদে দলবদ্ধ করা</td></tr></tbody></table></div>
+<h3>এরর মেসেজ পড়া</h3>
+<ul><li><code>syntax error at or near "x"</code>: x শব্দের কাছে বানান বা চিহ্নের ভুল।</li><li><code>relation "x" does not exist</code>: টেবিলের নাম ভুল, অথবা টেবিল এখনো বানানো হয়নি।</li><li><code>column "x" does not exist</code>: কলামের বানান ভুল।</li></ul>
+<details class="ex"><summary data-show="সমাধান দেখুন" data-hide="সমাধান লুকান"><small>অনুশীলন</small><span>একটি স্টেটমেন্টে আপনার নিজের নাম ও আজকের তারিখ দেখান।</span></summary><figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">SELECT 'Your Name' AS name, current_date AS today;</code></pre></figure></details>
+<aside class="callout take"><b>মূল কথা</b><p>এরর ব্যর্থতা নয়, তথ্য। প্রথম লাইনটি পড়ুন এবং <em>near</em>-এর পরের শব্দটি দেখুন।</p></aside>
+</div></section><section class="module reveal lv-b" id="m05"><div class="mhead"><span class="num" aria-hidden="true">05</span><div><span class="badge">মডিউল 05 · প্রাথমিক</span><h2>টেবিল ও ডেটা টাইপ</h2></div></div><div class="body">
+<p>টেবিলে সারি জমা থাকে, আর প্রতিটি কলামের একটি <strong>টাইপ</strong> থাকে যা PostgreSQL কার্যকর করে। সঠিক টাইপ বাছাই করাই ডেটা যাচাইয়ের সবচেয়ে সস্তা উপায়।</p>
+<div class="tbl"><table><thead><tr><th>টাইপ</th><th>কখন ব্যবহার করবেন</th></tr></thead><tbody><tr><td>SMALLINT, INTEGER, BIGINT</td><td>ক্রমশ বড় আকারের পূর্ণসংখ্যা</td></tr><tr><td>NUMERIC(p,s)</td><td>নির্ভুল দশমিক সংখ্যা, যেমন টাকার অঙ্ক</td></tr><tr><td>TEXT</td><td>যেকোনো দৈর্ঘ্যের লেখা (সীমা ব্যবসায়িক নিয়ম হলেই কেবল VARCHAR(n))</td></tr><tr><td>BOOLEAN</td><td>true বা false</td></tr><tr><td>DATE, TIMESTAMPTZ</td><td>তারিখ এবং সময়ের নির্দিষ্ট মুহূর্ত</td></tr><tr><td>UUID</td><td>বিশ্বজুড়ে অনন্য আইডি</td></tr><tr><td>JSONB</td><td>ইনডেক্সযোগ্য আধা-কাঠামোবদ্ধ ডকুমেন্ট</td></tr><tr><td>type[], ENUM</td><td>তালিকা এবং ছোট নির্দিষ্ট লেবেলের সেট</td></tr></tbody></table></div>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">CREATE TABLE students (
+    id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    full_name   TEXT         NOT NULL,
+    email       TEXT         NOT NULL UNIQUE,
+    gpa         NUMERIC(3,2) CHECK (gpa BETWEEN 0 AND 4),
+    enrolled_at TIMESTAMPTZ  NOT NULL DEFAULT now()
+);</code></pre></figure>
+<aside class="callout tip"><b>পরামর্শ</b><p><code>TIMESTAMP</code>-এর বদলে <code>TIMESTAMPTZ</code>, টাকার জন্য <code>FLOAT</code>-এর বদলে <code>NUMERIC</code>, এবং পুরোনো <code>SERIAL</code>-এর বদলে <code>IDENTITY</code> ব্যবহার করুন।</p></aside>
+</div></section><section class="module reveal lv-b" id="m06"><div class="mhead"><span class="num" aria-hidden="true">06</span><div><span class="badge">মডিউল 06 · প্রাথমিক</span><h2>CRUD: তৈরি, পড়া, হালনাগাদ, মোছা</h2></div></div><div class="body">
+<p>প্রতিদিনের চারটি কাজ হলো <code>INSERT</code>, <code>SELECT</code>, <code>UPDATE</code> ও <code>DELETE</code>। <code>RETURNING</code> দিয়ে দ্বিতীয় কুয়েরি ছাড়াই প্রভাবিত সারি ফেরত পাওয়া যায়, আর <code>ON CONFLICT</code> ইনসার্টকে আপসার্টে পরিণত করে।</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">INSERT INTO students (full_name, email, gpa)
+VALUES ('Ayesha Rahman', 'ayesha@uni.edu', 3.80),
+       ('Tanvir Hasan',  'tanvir@uni.edu', 3.40)
+RETURNING id;
+
+UPDATE students SET gpa = 3.90
+WHERE email = 'ayesha@uni.edu'
+RETURNING id, gpa;
+
+DELETE FROM students WHERE gpa &lt; 1.0;
+
+-- Upsert: insert, or update when the key already exists
+INSERT INTO courses (code, title, credits)
+VALUES ('CS101', 'Intro to CS', 3)
+ON CONFLICT (code) DO UPDATE SET title = EXCLUDED.title;</code></pre></figure>
+<aside class="callout warn"><b>সতর্কতা</b><p><code>WHERE</code> ছাড়া <code>UPDATE</code> বা <code>DELETE</code> চালালে প্রতিটি সারি বদলে যায়। আগে একই শর্ত দিয়ে <code>SELECT</code> চালান, অথবা <code>BEGIN</code> দিয়ে শুরু করুন যাতে <code>ROLLBACK</code> করা যায়।</p></aside>
+</div></section><section class="module reveal lv-b" id="m07"><div class="mhead"><span class="num" aria-hidden="true">07</span><div><span class="badge">মডিউল 07 · প্রাথমিক</span><h2>কুয়েরি: ফিল্টার, জয়েন, অ্যাগ্রিগেট</h2></div></div><div class="body">
+<p>SQL যে ক্রমে লেখা হয়, সেই ক্রমে চলে না। আসল ক্রম জানলে নতুনদের বেশিরভাগ ভুলের কারণ বোঝা যায়, যেমন <code>WHERE</code>-এ কলামের alias কেন কাজ করে না।</p>
+<p><strong>FROM, JOIN</strong> তারপর <strong>WHERE</strong> তারপর <strong>GROUP BY</strong> তারপর <strong>HAVING</strong> তারপর <strong>SELECT</strong> তারপর <strong>ORDER BY</strong> তারপর <strong>LIMIT</strong>।</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">SELECT c.code,
+       count(*)              AS enrolled,
+       round(avg(e.grade),2) AS avg_grade
+FROM courses c
+JOIN enrollments e ON e.course_id = c.id
+GROUP BY c.code
+HAVING count(*) &gt;= 5
+ORDER BY enrolled DESC
+LIMIT 3;</code></pre></figure>
+<div class="tbl res"><table><caption>ফলাফল</caption><thead><tr><th>code</th><th>enrolled</th><th>avg_grade</th></tr></thead><tbody><tr><td>CS101</td><td>42</td><td>3.12</td></tr><tr><td>MA201</td><td>37</td><td>2.88</td></tr><tr><td>PH110</td><td>29</td><td>3.41</td></tr></tbody></table></div>
+<h3>জয়েনের ধরন</h3>
+<ul><li><code>INNER JOIN</code>: দুই পাশেই মিলে যাওয়া সারি শুধু।</li><li><code>LEFT JOIN</code>: বাঁ পাশের সব সারি, না মিললে ডান পাশে NULL।</li><li><code>FULL JOIN</code>: দুই পাশের সবকিছু।</li></ul>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">-- Students who have not enrolled in anything
+SELECT s.full_name
+FROM students s
+LEFT JOIN enrollments e ON e.student_id = s.id
+WHERE e.student_id IS NULL;</code></pre></figure>
+<details class="ex"><summary data-show="সমাধান দেখুন" data-hide="সমাধান লুকান"><small>অনুশীলন</small><span>যেসব কোর্সে কোনো শিক্ষার্থী ভর্তি নেই, সেগুলোর তালিকা বের করুন।</span></summary><figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">SELECT c.code
+FROM courses c
+LEFT JOIN enrollments e ON e.course_id = c.id
+WHERE e.course_id IS NULL;</code></pre></figure></details>
+<aside class="callout tip"><b>পরামর্শ</b><p><code>SELECT *</code>-এর বদলে দরকারি কলামের নাম লিখুন। এটি দ্রুত, পরিষ্কার এবং টেবিল বদলালেও ভাঙে না।</p></aside>
+</div></section><section class="module reveal lv-b" id="m08"><div class="mhead"><span class="num" aria-hidden="true">08</span><div><span class="badge">মডিউল 08 · প্রাথমিক</span><h2>ফাংশন ও এক্সপ্রেশন</h2></div></div><div class="body">
+<p>PostgreSQL-এ কয়েকশো বিল্ট-ইন ফাংশন আছে। প্রতিদিনের কাজের বেশিরভাগ চার ধরনে পড়ে: লেখা, সংখ্যা, তারিখ ও NULL সামলানো।</p>
+<div class="tbl"><table><thead><tr><th>দল</th><th>প্রচলিত টুল</th></tr></thead><tbody><tr><td>লেখা</td><td>lower(), upper(), trim(), replace(), split_part(), format(), ||, ILIKE</td></tr><tr><td>সংখ্যা</td><td>round(), ceil(), floor(), abs(), mod(), random()</td></tr><tr><td>তারিখ ও সময়</td><td>now(), current_date, interval, date_trunc(), extract(), age(), to_char()</td></tr><tr><td>NULL ও রূপান্তর</td><td>COALESCE(), NULLIF(), IS DISTINCT FROM, ::type, CAST()</td></tr></tbody></table></div>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">SELECT lower(email)                        AS email,
+       full_name || ' &lt;' || email || '&gt;'   AS display,
+       COALESCE(gpa, 0)                    AS gpa_or_zero,
+       date_trunc('month', enrolled_at)    AS month,
+       now() - enrolled_at                 AS time_enrolled,
+       to_char(enrolled_at, 'DD Mon YYYY') AS pretty_date,
+       gpa::int                            AS gpa_rounded
+FROM students
+WHERE full_name ILIKE 'a%'
+  AND enrolled_at &gt;= now() - interval '1 year';</code></pre></figure>
+<aside class="callout warn"><b>সতর্কতা</b><p>NULL মানে <em>অজানা</em>, শূন্য বা ফাঁকা নয়। <code>x = NULL</code> কখনো সত্য হয় না। <code>IS NULL</code> বা <code>IS DISTINCT FROM</code> ব্যবহার করুন।</p></aside>
+</div></section><section class="module reveal lv-i" id="m09"><div class="mhead"><span class="num" aria-hidden="true">09</span><div><span class="badge">মডিউল 09 · মধ্যম</span><h2>কনস্ট্রেইন্ট, রিলেশনশিপ, নরমালাইজেশন</h2></div></div><div class="body">
+<p>কনস্ট্রেইন্ট ডেটাবেসকে নিজের ডেটা রক্ষা করতে দেয়: <code>PRIMARY KEY</code>, <code>FOREIGN KEY</code>, <code>UNIQUE</code>, <code>NOT NULL</code> ও <code>CHECK</code>। অ্যাপ্লিকেশন কোডে বাগ থাকে, কনস্ট্রেইন্ট ভোলে না।</p>
+<ul><li><strong>এক থেকে অনেক:</strong> "অনেক" দিকের টেবিলে ফরেন কী।</li><li><strong>অনেক থেকে অনেক:</strong> কম্পোজিট কী সহ জাংশন টেবিল, নিচের মতো।</li><li><strong>এক থেকে এক:</strong> এমন ফরেন কী যা একইসঙ্গে <code>UNIQUE</code>।</li></ul>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">CREATE TABLE courses (
+    id      BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    code    TEXT     NOT NULL UNIQUE,
+    title   TEXT     NOT NULL,
+    credits SMALLINT NOT NULL CHECK (credits &gt; 0)
+);
+
+-- Junction table for the many to many relationship
+CREATE TABLE enrollments (
+    student_id BIGINT NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    course_id  BIGINT NOT NULL REFERENCES courses(id)  ON DELETE RESTRICT,
+    grade      NUMERIC(3,2),
+    PRIMARY KEY (student_id, course_id)
+);</code></pre></figure>
+<h3>তিন লাইনে নরমালাইজেশন</h3>
+<ul><li><strong>1NF:</strong> প্রতি ঘরে একটি মান, পুনরাবৃত্ত গ্রুপ নয়।</li><li><strong>2NF:</strong> প্রতিটি কলাম পুরো কী-এর ওপর নির্ভরশীল।</li><li><strong>3NF:</strong> কোনো কলাম অন্য নন-কী কলামের ওপর নির্ভরশীল নয়।</li></ul>
+<aside class="callout take"><b>মূল কথা</b><p>প্রথমে সঠিকতার জন্য নরমালাইজ করুন, তারপর পরিমাপে ধীর প্রমাণিত হলে তবেই ইচ্ছাকৃতভাবে ডিনরমালাইজ করুন।</p></aside>
+</div></section><section class="module reveal lv-i" id="m10"><div class="mhead"><span class="num" aria-hidden="true">10</span><div><span class="badge">মডিউল 10 · মধ্যম</span><h2>কাঠামো বদল: ALTER, স্কিমা, সিকোয়েন্স</h2></div></div><div class="body">
+<p>বাস্তব প্রজেক্ট বদলায়। <code>ALTER TABLE</code> টেবিল নতুন করে না বানিয়েই কলাম যোগ, নাম বদল বা মোছে। <strong>স্কিমা</strong> হলো ডেটাবেসের ভেতরের ফোল্ডার, যা টেবিলকে দলবদ্ধ করে। <strong>সিকোয়েন্স</strong> একটি কাউন্টার যা একের পর এক সংখ্যা দেয় (identity কলাম ভেতরে একটি সিকোয়েন্সই ব্যবহার করে)।</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">-- Add, rename, default and remove a column
+ALTER TABLE students ADD COLUMN phone TEXT;
+ALTER TABLE students RENAME COLUMN phone TO mobile;
+ALTER TABLE students ALTER COLUMN mobile SET DEFAULT '';
+ALTER TABLE students DROP COLUMN mobile;
+
+-- A schema groups tables like a folder
+CREATE SCHEMA library;
+CREATE TABLE library.books (id INT PRIMARY KEY, title TEXT NOT NULL);
+SET search_path TO library, public;
+
+-- A sequence is a counter
+CREATE SEQUENCE ticket_no START 1000;
+SELECT nextval('ticket_no');</code></pre></figure>
+<aside class="callout warn"><b>সতর্কতা</b><p><code>DROP COLUMN</code> ও <code>DROP TABLE</code> ডেটা চিরতরে মুছে দেয়। বড় টেবিলে নতুন কলাম nullable হিসেবে যোগ করুন, ব্যাচে ব্যাকফিল করুন, তারপর কনস্ট্রেইন্ট দিন (প্রোডাকশন মডিউল দেখুন)।</p></aside>
+</div></section><section class="module reveal lv-i" id="m11"><div class="mhead"><span class="num" aria-hidden="true">11</span><div><span class="badge">মডিউল 11 · মধ্যম</span><h2>সাবকুয়েরি, সেট অপারেশন, CASE</h2></div></div><div class="body">
+<p>সাবকুয়েরি মানে কুয়েরির ভেতরে কুয়েরি: <strong>scalar</strong> (একটি মান), <code>IN</code> (তালিকা) বা <code>EXISTS</code> (মিল আছে কি না)। <code>EXISTS</code> প্রথম মিল পেলেই থামে, তাই বড় ডেটায় প্রায়ই <code>IN</code>-এর চেয়ে ভালো চলে।</p>
+<ul><li><code>UNION</code>: মিলিয়ে ডুপ্লিকেট বাদ দেয়। <code>UNION ALL</code>: ডুপ্লিকেট সহ মেলায় (দ্রুত)।</li><li><code>INTERSECT</code>: দুই পাশেই আছে এমন সারি। <code>EXCEPT</code>: শুধু প্রথম পাশে আছে এমন সারি।</li></ul>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">-- Scalar subquery: students above the average GPA
+SELECT full_name, gpa
+FROM students
+WHERE gpa &gt; (SELECT avg(gpa) FROM students);
+
+-- EXISTS stops at the first match
+SELECT c.code
+FROM courses c
+WHERE EXISTS (SELECT 1 FROM enrollments e WHERE e.course_id = c.id);
+
+-- Set operation (assumes an alumni table with the same email column)
+SELECT email FROM students
+EXCEPT
+SELECT email FROM alumni;
+
+-- CASE is a conditional expression
+SELECT full_name,
+       CASE WHEN gpa &gt;= 3.7 THEN 'honours'
+            WHEN gpa &gt;= 2.0 THEN 'pass'
+            ELSE 'probation' END AS standing
+FROM students;</code></pre></figure>
+<aside class="callout take"><b>মূল কথা</b><p>ডুপ্লিকেট হওয়ার সুযোগ নেই বা সমস্যা নেই, এমন জায়গায় <code>UNION ALL</code> ব্যবহার করুন। সাধারণ <code>UNION</code> সর্ট বা হ্যাশের খরচ দেয়।</p></aside>
+</div></section><section class="module reveal lv-i" id="m12"><div class="mhead"><span class="num" aria-hidden="true">12</span><div><span class="badge">মডিউল 12 · মধ্যম</span><h2>ইনডেক্স ও কুয়েরি প্ল্যান</h2></div></div><div class="body">
+<p>ইনডেক্স ছাড়া PostgreSQL পুরো টেবিল পড়ে (<em>Seq Scan</em>)। ডিফল্ট <strong>B-tree</strong> ইনডেক্স লগারিদমিক সময়ে সারি খুঁজে পায় এবং সর্টিং ও রেঞ্জ ফিল্টারেও কাজে লাগে।</p>
+<div class="tbl"><table><thead><tr><th>ইনডেক্স</th><th>কিসের জন্য সেরা</th></tr></thead><tbody><tr><td>B-tree</td><td>সমতা, রেঞ্জ, ORDER BY (ডিফল্ট)</td></tr><tr><td>GIN</td><td>JSONB, অ্যারে, ফুল টেক্সট সার্চ</td></tr><tr><td>GiST</td><td>জ্যামিতি, রেঞ্জ, নিকটতম প্রতিবেশী</td></tr><tr><td>BRIN</td><td>সময় অনুযায়ী সাজানো বিশাল append-only টেবিল</td></tr><tr><td>Hash</td><td>শুধু সমতা (B-tree-র চেয়ে কমই ভালো)</td></tr></tbody></table></div>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">-- Index foreign keys and columns used in WHERE, JOIN and ORDER BY
+CREATE INDEX idx_enroll_course ON enrollments (course_id);
+
+-- Partial index: smaller and faster for a common filter
+CREATE INDEX idx_students_top ON students (gpa DESC) WHERE gpa &gt;= 3.5;
+
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT student_id, grade FROM enrollments WHERE course_id = 42;</code></pre></figure>
+<p>প্ল্যান ভেতরের লাইন থেকে বাইরের দিকে পড়ুন। <code>Seq Scan</code> ও <code>Index Scan</code>, আনুমানিক ও প্রকৃত সারির সংখ্যা এবং প্রকৃত সময় তুলনা করুন। অনুমান ও বাস্তবের বড় ফারাক সাধারণত পুরোনো পরিসংখ্যানের লক্ষণ, তখন <code>ANALYZE</code> চালান।</p>
+<aside class="callout warn"><b>সতর্কতা</b><p>প্রতিটি ইনডেক্স পড়া দ্রুত করে কিন্তু লেখা ধীর করে এবং ডিস্ক খরচ করে। ডুপ্লিকেট ও অব্যবহৃত ইনডেক্স মুছে ফেলুন।</p></aside>
+</div></section><section class="module reveal lv-i" id="m13"><div class="mhead"><span class="num" aria-hidden="true">13</span><div><span class="badge">মডিউল 13 · মধ্যম</span><h2>প্যাটার্ন ম্যাচিং ও ফুল টেক্সট সার্চ</h2></div></div><div class="body">
+<p>তিন স্তর আছে: <code>%</code> ওয়াইল্ডকার্ডসহ <code>LIKE</code> ও <code>ILIKE</code>, <code>~</code> দিয়ে রেগুলার এক্সপ্রেশন, এবং <strong>ফুল টেক্সট সার্চ</strong>, যা শব্দ, স্টেমিং (<em>indexes</em> লিখলে <em>index</em>-ও মেলে) ও র‍্যাংকিং বোঝে।</p>
+<div class="tbl"><table><thead><tr><th>টুল</th><th>কখন</th><th>ইনডেক্স</th></tr></thead><tbody><tr><td>LIKE, ILIKE</td><td>সরল প্যাটার্ন</td><td>B-tree শুধু 'abc%'-এ সাহায্য করে; '%abc%'-এর জন্য pg_trgm</td></tr><tr><td>~ (regex)</td><td>জটিল প্যাটার্ন</td><td>pg_trgm</td></tr><tr><td>tsvector @@ tsquery</td><td>র‍্যাংকিংসহ শব্দ খোঁজা</td><td>GIN</td></tr></tbody></table></div>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">-- Simple pattern and regular expression matching
+SELECT full_name FROM students WHERE full_name ILIKE '%rahman%';
+SELECT email FROM students WHERE email ~ '^[a-z]+@uni\.edu$';
+
+-- Full text search with a generated column and a GIN index
+CREATE TABLE articles (
+    id    SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    body  TEXT NOT NULL,
+    tsv   tsvector GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || body)) STORED
+);
+CREATE INDEX idx_articles_tsv ON articles USING GIN (tsv);
+INSERT INTO articles (title, body) VALUES
+    ('Indexes', 'A B-tree index speeds up lookups'),
+    ('Joins', 'Combine rows from two tables');
+
+SELECT title, ts_rank(tsv, q) AS score
+FROM articles, websearch_to_tsquery('english', 'index lookup') AS q
+WHERE tsv @@ q
+ORDER BY score DESC;</code></pre></figure>
+<aside class="callout tip"><b>পরামর্শ</b><p><code>tsvector</code> একটি generated কলামে রাখুন এবং উপরের মতো GIN দিয়ে ইনডেক্স করুন, তাহলে সার্চ দ্রুত থাকে।</p></aside>
+</div></section><section class="module reveal lv-i" id="m14"><div class="mhead"><span class="num" aria-hidden="true">14</span><div><span class="badge">মডিউল 14 · মধ্যম</span><h2>ট্রানজ্যাকশন, MVCC ও লকিং</h2></div></div><div class="body">
+<p>ট্রানজ্যাকশন কয়েকটি স্টেটমেন্টকে একসঙ্গে সফল বা ব্যর্থ করে (<strong>ACID</strong>: অ্যাটমিসিটি, কনসিস্টেন্সি, আইসোলেশন, ডিউরেবিলিটি)। PostgreSQL <strong>MVCC</strong> ব্যবহার করে: প্রতিটি ট্রানজ্যাকশন একটি সামঞ্জস্যপূর্ণ স্ন্যাপশট দেখে, তাই পাঠক কখনো লেখককে আটকায় না।</p>
+<div class="tbl"><table><thead><tr><th>আইসোলেশন লেভেল</th><th>আচরণ</th></tr></thead><tbody><tr><td>READ COMMITTED (ডিফল্ট)</td><td>প্রতিটি স্টেটমেন্ট শুরুর আগে কমিট হওয়া ডেটা দেখে</td></tr><tr><td>REPEATABLE READ</td><td>পুরো ট্রানজ্যাকশন একটিই স্ন্যাপশট দেখে</td></tr><tr><td>SERIALIZABLE</td><td>যেন ট্রানজ্যাকশনগুলো একটির পর একটি চলেছে; ব্যর্থ হলে আবার চেষ্টা করুন</td></tr></tbody></table></div>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">BEGIN;
+UPDATE accounts SET balance = balance - 500 WHERE id = 1;
+UPDATE accounts SET balance = balance + 500 WHERE id = 2;
+COMMIT;  -- or ROLLBACK to undo everything since BEGIN
+
+-- Lock a row while you decide what to do with it
+BEGIN ISOLATION LEVEL REPEATABLE READ;
+SELECT balance FROM accounts WHERE id = 1 FOR UPDATE;
+COMMIT;</code></pre></figure>
+<aside class="callout tip"><b>পরামর্শ</b><p>ট্রানজ্যাকশন ছোট রাখুন। দীর্ঘ ট্রানজ্যাকশন লক ধরে রাখে, ক্লিনআপ আটকায় এবং টেবিল ফুলিয়ে দেয়। ডেডলক এড়াতে সবসময় একই ক্রমে লক নিন।</p></aside>
+</div></section><section class="module reveal lv-a" id="m15"><div class="mhead"><span class="num" aria-hidden="true">15</span><div><span class="badge">মডিউল 15 · উন্নত</span><h2>অ্যাডভান্সড SQL: CTE, উইন্ডো, JSONB, ভিউ</h2></div></div><div class="body">
+<p><strong>CTE</strong> (<code>WITH</code>) মাঝের ফলাফলকে নাম দেয় এবং জটিল কুয়েরি পাঠযোগ্য রাখে। <strong>উইন্ডো ফাংশন</strong> সম্পর্কিত সারির ওপর হিসাব করে, কিন্তু <code>GROUP BY</code>-এর মতো সারি গুটিয়ে ফেলে না: <code>rank()</code>, <code>row_number()</code>, <code>lag()</code>, ক্রমবর্ধমান যোগফল।</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">-- CTE plus window function: top 3 grades per course
+WITH ranked AS (
+    SELECT course_id, student_id, grade,
+           rank() OVER (PARTITION BY course_id ORDER BY grade DESC) AS pos
+    FROM enrollments
+)
+SELECT course_id, student_id, grade
+FROM ranked
+WHERE pos &lt;= 3;</code></pre></figure>
+<h3>JSONB</h3>
+<p>রিলেশনাল কলামের পাশে নমনীয় অ্যাট্রিবিউট রাখুন এবং GIN দিয়ে ইনডেক্স করুন।</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">ALTER TABLE students ADD COLUMN profile JSONB NOT NULL DEFAULT '{}';
+CREATE INDEX idx_students_profile ON students USING GIN (profile);
+
+SELECT full_name
+FROM students
+WHERE profile @&gt; '{"club": "robotics"}';</code></pre></figure>
+<h3>ভিউ</h3>
+<p>ভিউ একটি কুয়েরি সংরক্ষণ করে। <strong>ম্যাটেরিয়ালাইজড</strong> ভিউ ফলাফল সংরক্ষণ করে, অর্থাৎ হালনাগাদের বদলে গতি পাওয়া যায়।</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">CREATE MATERIALIZED VIEW course_stats AS
+SELECT course_id, count(*) AS n, round(avg(grade),2) AS avg_grade
+FROM enrollments
+GROUP BY course_id;
+
+CREATE UNIQUE INDEX ON course_stats (course_id);
+REFRESH MATERIALIZED VIEW CONCURRENTLY course_stats;</code></pre></figure>
+</div></section><section class="module reveal lv-a" id="m16"><div class="mhead"><span class="num" aria-hidden="true">16</span><div><span class="badge">মডিউল 16 · উন্নত</span><h2>রিকার্সিভ কুয়েরি ও হায়ারার্কি</h2></div></div><div class="body">
+<p><strong>রিকার্সিভ CTE</strong> নিজের ফলাফলের ওপর কুয়েরি বারবার চালায়। গাছ ও গ্রাফের জন্য উপযোগী: অর্গ চার্ট, ক্যাটাগরি মেনু, ফোল্ডার, বিল অব ম্যাটেরিয়ালস। <code>UNION ALL</code> দিয়ে দুই অংশ জোড়া থাকে: <em>অ্যাঙ্কর</em> (শুরুর সারি) ও <em>রিকার্সিভ ধাপ</em> (পরের স্তর খোঁজে)। ধাপ নতুন সারি না দিলে থামে।</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">CREATE TABLE staff (
+    id      INT PRIMARY KEY,
+    name    TEXT NOT NULL,
+    boss_id INT REFERENCES staff(id)
+);
+INSERT INTO staff VALUES (1,'Dean',NULL), (2,'Head of CS',1), (3,'Lecturer A',2), (4,'Lecturer B',2), (5,'Head of Math',1);
+
+WITH RECURSIVE chain AS (
+    SELECT id, name, boss_id, 0 AS depth
+    FROM staff
+    WHERE boss_id IS NULL
+    UNION ALL
+    SELECT s.id, s.name, s.boss_id, c.depth + 1
+    FROM staff s
+    JOIN chain c ON s.boss_id = c.id
+    WHERE c.depth &lt; 20
+)
+SELECT repeat('    ', depth) || name AS org_chart, depth
+FROM chain
+ORDER BY depth, id;</code></pre></figure>
+<aside class="callout warn"><b>সতর্কতা</b><p>চক্রাকার ডেটা (A-র বস B, B-র বস A) অনন্তকাল ঘুরবে। <code>WHERE c.depth &lt; 20</code>-এর মতো গভীরতার সীমা রাখুন, বা দেখা আইডি অ্যারেতে জমা রাখুন।</p></aside>
+</div></section><section class="module reveal lv-a" id="m17"><div class="mhead"><span class="num" aria-hidden="true">17</span><div><span class="badge">মডিউল 17 · উন্নত</span><h2>PL/pgSQL প্রোগ্রামিং</h2></div></div><div class="body">
+<p>PL/pgSQL SQL-এ ভেরিয়েবল, <code>IF</code>, লুপ ও এরর হ্যান্ডলিং যোগ করে। কুয়েরিতে মান ফেরত লাগলে <strong>ফাংশন</strong>, ধাপে ধাপে কাজ চালাতে <strong>প্রসিডিউর</strong> (<code>CALL</code> দিয়ে ডাকা হয়), আর একবারের স্ক্রিপ্টের জন্য <code>DO</code> ব্লক।</p>
+<ul><li><code>DECLARE</code> দিয়ে ভেরিয়েবল, <code>SELECT ... INTO</code> দিয়ে মান ভরা।</li><li>নিয়ন্ত্রণে <code>IF</code>, <code>ELSIF</code>, <code>FOR ... LOOP</code>।</li><li>এরর সামলাতে <code>EXCEPTION WHEN ... THEN</code>, জানাতে <code>RAISE</code>।</li></ul>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">CREATE OR REPLACE FUNCTION grade_letter(score NUMERIC) RETURNS TEXT
+LANGUAGE plpgsql IMMUTABLE AS $$
+BEGIN
+    IF score IS NULL THEN
+        RETURN NULL;
+    ELSIF score &gt;= 3.7 THEN
+        RETURN 'A';
+    ELSIF score &gt;= 3.0 THEN
+        RETURN 'B';
+    ELSE
+        RETURN 'C';
+    END IF;
+END;
+$$;
+
+SELECT full_name, grade_letter(gpa) AS letter FROM students;
+
+CREATE PROCEDURE enroll_student(p_student BIGINT, p_course BIGINT)
+LANGUAGE plpgsql AS $$
+DECLARE
+    seats INT;
+BEGIN
+    SELECT count(*) INTO seats FROM enrollments WHERE course_id = p_course;
+    IF seats &gt;= 30 THEN
+        RAISE EXCEPTION 'Course % is full', p_course;
+    END IF;
+    INSERT INTO enrollments (student_id, course_id) VALUES (p_student, p_course);
+EXCEPTION WHEN unique_violation THEN
+    RAISE NOTICE 'Student % is already enrolled', p_student;
+END;
+$$;
+
+CALL enroll_student(6, 1);
+CALL enroll_student(6, 1);</code></pre></figure>
+<aside class="callout take"><b>মূল কথা</b><p>সারি ধরে ধরে লুপের চেয়ে সেট-ভিত্তিক SQL ভালো। একটি <code>UPDATE</code> সাধারণত আপডেটের লুপের চেয়ে দ্রুত। সাধারণ SQL যা পারে না, শুধু সেই লজিকের জন্য PL/pgSQL।</p></aside>
+</div></section><section class="module reveal lv-a" id="m18"><div class="mhead"><span class="num" aria-hidden="true">18</span><div><span class="badge">মডিউল 18 · উন্নত</span><h2>ফাংশন, ট্রিগার, পার্টিশনিং</h2></div></div><div class="body">
+<p><strong>PL/pgSQL</strong> দিয়ে ডেটাবেসের ভেতরেই লজিক চালানো যায়। <strong>ট্রিগার</strong> <code>INSERT</code>, <code>UPDATE</code> বা <code>DELETE</code>-এ স্বয়ংক্রিয়ভাবে ফাংশন ডাকে, যা অডিট কলাম ও ছোট নিয়ম বজায় রাখতে উপযোগী।</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">ALTER TABLE students ADD COLUMN updated_at TIMESTAMPTZ NOT NULL DEFAULT now();
+
+CREATE FUNCTION touch_updated_at() RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+    NEW.updated_at := now();
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER trg_students_touch
+BEFORE UPDATE ON students
+FOR EACH ROW EXECUTE FUNCTION touch_updated_at();</code></pre></figure>
+<h3>পার্টিশনিং</h3>
+<p>ক্রমাগত বাড়তে থাকা টেবিলকে রেঞ্জ, লিস্ট বা হ্যাশ দিয়ে ভাগ করুন। পার্টিশন কী দিয়ে ফিল্টার করলে শুধু প্রাসঙ্গিক পার্টিশন পড়া হয়, আর পুরোনো ডেটা সঙ্গে সঙ্গে আলাদা বা মুছে ফেলা যায়।</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">CREATE TABLE audit_log (
+    id        BIGINT GENERATED ALWAYS AS IDENTITY,
+    logged_at TIMESTAMPTZ NOT NULL,
+    payload   JSONB
+) PARTITION BY RANGE (logged_at);
+
+CREATE TABLE audit_log_2026_10 PARTITION OF audit_log
+FOR VALUES FROM ('2026-10-01') TO ('2026-11-01');</code></pre></figure>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">-- Keyset pagination: stays fast on huge tables, unlike large OFFSET values
+SELECT id, full_name
+FROM students
+WHERE id &gt; 1000
+ORDER BY id
+LIMIT 50;</code></pre></figure>
+<aside class="callout take"><b>মূল কথা</b><p>বড় টেবিল পুরোটা মেমোরিতে লোড করবেন না। কীসেট দিয়ে পেজিনেশন করুন, কার্সর দিয়ে স্ট্রিম করুন এবং কয়েকশো থেকে হাজার সারির ব্যাচে লিখুন।</p></aside>
+</div></section><section class="module reveal lv-a" id="m19"><div class="mhead"><span class="num" aria-hidden="true">19</span><div><span class="badge">মডিউল 19 · উন্নত</span><h2>রেপ্লিকেশন, এক্সটেনশন, টিউনিং</h2></div></div><div class="body">
+<p><strong>ফিজিক্যাল (স্ট্রিমিং)</strong> রেপ্লিকেশন পুরো ক্লাস্টারের WAL কপি করে, হট স্ট্যান্ডবাই ও ফেইলওভারের জন্য। <strong>লজিক্যাল</strong> রেপ্লিকেশন বেছে নেওয়া টেবিলের পরিবর্তন পাঠায়, মেজর ভার্সন আপগ্রেড ও ডেটা বিতরণে কাজে লাগে।</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">-- Primary (postgresql.conf): wal_level = logical
+-- Publish selected tables
+CREATE PUBLICATION pub_students FOR TABLE students, courses;
+
+-- Subscriber: pull those changes continuously
+CREATE SUBSCRIPTION sub_students
+CONNECTION 'host=primary dbname=university user=repl'
+PUBLICATION pub_students;</code></pre></figure>
+<h3>এক্সটেনশন</h3>
+<p>এক্সটেনশন ডেটাবেস ফর্ক না করেই নতুন সুবিধা যোগ করে: <code>pg_trgm</code> (অস্পষ্ট সার্চ), <code>pgcrypto</code>, <strong>PostGIS</strong> (ভূগোল), <code>pg_stat_statements</code> (কুয়েরি পরিসংখ্যান), TimescaleDB (টাইম সিরিজ)।</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX idx_students_name_trgm ON students USING GIN (full_name gin_trgm_ops);
+SELECT full_name FROM students WHERE full_name ILIKE '%rahm%';
+
+SHOW shared_buffers;
+ALTER SYSTEM SET work_mem = '32MB';
+SELECT pg_reload_conf();</code></pre></figure>
+<h3>টিউনিংয়ের প্রথম নবগুলো</h3>
+<ul><li><code>shared_buffers</code>: সাধারণ শুরুর হিসাব RAM-এর প্রায় ২৫%।</li><li><code>effective_cache_size</code>: প্ল্যানারকে জানায় OS কতটা ক্যাশ করতে পারে, প্রায়ই RAM-এর ৫০ থেকে ৭৫%।</li><li><code>work_mem</code>: প্রতিটি সর্ট বা হ্যাশ ধাপে লাগে, তাই সাবধানে বাড়ান।</li><li><code>maintenance_work_mem</code>: VACUUM ও ইনডেক্স বানানো দ্রুত করে।</li><li><code>max_connections</code>: কম রাখুন, পুল ব্যবহার করুন।</li></ul>
+<aside class="callout warn"><b>সতর্কতা</b><p>প্রতিটি সেটিং বদলের আগে ও পরে একই লোডে মাপুন। অনুমানে টিউন করলে প্রায়ই অবস্থা খারাপ হয়।</p></aside>
+</div></section><section class="module reveal lv-a" id="m20"><div class="mhead"><span class="num" aria-hidden="true">20</span><div><span class="badge">মডিউল 20 · উন্নত</span><h2>নিরাপত্তা, ব্যাকআপ ও প্রোডাকশন</h2></div></div><div class="body">
+<p>প্রতিটি অ্যাপ্লিকেশনের জন্য <strong>রোল</strong> বানান, যতটুকু অনুমতি দরকার ততটুকুই দিন। অ্যাপকে কখনো সুপারইউজার হিসেবে সংযুক্ত হতে দেবেন না।</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">CREATE ROLE app_user LOGIN PASSWORD 'change_me';
+GRANT CONNECT ON DATABASE university TO app_user;
+GRANT SELECT, INSERT, UPDATE ON students TO app_user;
+REVOKE ALL ON enrollments FROM PUBLIC;</code></pre></figure>
+<h3>ব্যাকআপ ও পুনরুদ্ধার</h3>
+<p><code>pg_dump</code> লজিক্যাল ব্যাকআপ দেয়। পয়েন্ট ইন টাইম রিকভারির জন্য বেস ব্যাকআপের সঙ্গে আর্কাইভ করা <strong>WAL</strong> ব্যবহার করুন। স্ট্রিমিং রেপ্লিকেশন একটি হট স্ট্যান্ডবাই রাখে, যা শুধু-পড়া ট্রাফিকও সামলাতে পারে।</p>
+<figure class="code"><figcaption><span>Shell</span><span class="fa"><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sh"># Compressed custom format dump
+pg_dump -Fc -d university -f university.dump
+
+# Restore into a separate copy first
+createdb university_copy
+pg_restore -d university_copy university.dump</code></pre></figure>
+<h3>বাস্তবে চালানো</h3>
+<ul><li>সার্ভারের সামনে <strong>PgBouncer</strong> বা অন্য কানেকশন পুল রাখুন।</li><li><strong>autovacuum</strong> চালু রাখুন এবং টেবিল ব্লোট নজরে রাখুন।</li><li><code>pg_stat_statements</code> দিয়ে ধীর কুয়েরি ধরুন।</li><li>বড় টেবিলে দীর্ঘ লক ছাড়া মাইগ্রেশন করুন।</li></ul>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">-- Safe migration on a big table: nullable column, batched backfill, then constraint
+ALTER TABLE students ADD COLUMN phone TEXT;
+UPDATE students SET phone = '' WHERE id BETWEEN 1 AND 1000 AND phone IS NULL;
+ALTER TABLE students ADD CONSTRAINT phone_required CHECK (phone IS NOT NULL) NOT VALID;
+ALTER TABLE students VALIDATE CONSTRAINT phone_required;
+
+-- Find the slowest statements (needs the pg_stat_statements extension)
+SELECT query, calls, round(mean_exec_time::numeric, 2) AS avg_ms
+FROM pg_stat_statements
+ORDER BY mean_exec_time DESC
+LIMIT 5;</code></pre></figure>
+<aside class="callout warn"><b>সতর্কতা</b><p><code>DROP</code> ও <code>pg_restore --clean</code>-এর মতো ধ্বংসাত্মক কমান্ড ফেরানো যায় না। আগে একটি কপিতে রিস্টোর করুন, যাচাই করুন, তারপর বদলান।</p></aside>
+</div></section><section class="module reveal lv-a" id="m21"><div class="mhead"><span class="num" aria-hidden="true">21</span><div><span class="badge">মডিউল 21 · উন্নত</span><h2>রো লেভেল সিকিউরিটি</h2></div></div><div class="body">
+<p><code>GRANT</code> ঠিক করে একটি রোল কোন <em>টেবিল</em> ছুঁতে পারবে। <strong>রো লেভেল সিকিউরিটি</strong> (RLS) ঠিক করে কোন <em>সারি</em>, এবং ডেটাবেস নিজেই তা কার্যকর করে। মাল্টি-টেন্যান্ট অ্যাপে, যেখানে প্রতিটি গ্রাহক শুধু নিজের সারি দেখবে, এটিই মানক উপায়। <strong>পলিসি</strong> হলো নিয়ম: <code>USING</code> কোন সারি পড়া, আপডেট বা মোছা যাবে তা ছাঁকে, আর <code>WITH CHECK</code> লেখা সারি যাচাই করে।</p>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">CREATE TABLE notes (
+    id    SERIAL PRIMARY KEY,
+    owner TEXT NOT NULL DEFAULT current_user,
+    body  TEXT NOT NULL
+);
+
+ALTER TABLE notes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE notes FORCE ROW LEVEL SECURITY;
+
+CREATE POLICY own_notes ON notes
+    USING (owner = current_user)
+    WITH CHECK (owner = current_user);</code></pre></figure>
+<aside class="callout warn"><b>সতর্কতা</b><p>সুপারইউজার ও <code>BYPASSRLS</code> রোল পলিসি এড়িয়ে যায়, আর টেবিলের মালিকও এড়ায় যদি না <code>FORCE ROW LEVEL SECURITY</code> চালু থাকে। সবসময় সাধারণ রোল দিয়ে পরীক্ষা করুন।</p></aside>
+</div></section><section class="module reveal lv-a" id="m22"><div class="mhead"><span class="num" aria-hidden="true">22</span><div><span class="badge">মডিউল 22 · উন্নত</span><h2>আধুনিক PostgreSQL: Docker Compose ও pgvector</h2></div></div><div class="body">
+<p><code>docker-compose.yml</code> এক কমান্ডে, <code>docker compose up -d</code>, প্রত্যেক টিমমেটকে একই ডেটাবেস দেয়। <strong>pgvector</strong> এক্সটেনশন <code>vector</code> কলামে <em>এমবেডিং</em> (AI মডেলের বানানো সংখ্যার তালিকা) রাখে এবং সবচেয়ে কাছেরগুলো খুঁজে দেয়। সিম্যান্টিক সার্চ ও RAG অ্যাপের ভিত্তি এটাই।</p>
+<figure class="code"><figcaption><span>Shell</span><span class="fa"><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sh"># docker-compose.yml
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: university
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:</code></pre></figure>
+<figure class="code"><figcaption><span>SQL</span><span class="fa"><button class="tryb" type="button">চেষ্টা করুন ▶</button><button class="copy" type="button">কপি</button></span></figcaption><pre><code data-lang="sql">CREATE EXTENSION IF NOT EXISTS vector;
+CREATE TABLE docs (
+    id        BIGSERIAL PRIMARY KEY,
+    content   TEXT NOT NULL,
+    embedding vector(3)
+);
+INSERT INTO docs (content, embedding)
+VALUES ('cat', '[1,0,0]'), ('kitten', '[0.9,0.1,0]'), ('car', '[0,0,1]');
+CREATE INDEX ON docs USING hnsw (embedding vector_cosine_ops);
+
+-- Nearest two documents by cosine distance
+SELECT content FROM docs ORDER BY embedding &lt;=&gt; '[1,0,0]' LIMIT 2;</code></pre></figure>
+<div class="tbl"><table><thead><tr><th>অপারেটর</th><th>দূরত্ব</th></tr></thead><tbody><tr><td>&lt;-&gt;</td><td>ইউক্লিডীয় (L2)</td></tr><tr><td>&lt;=&gt;</td><td>কোসাইন</td></tr><tr><td>&lt;#&gt;</td><td>ঋণাত্মক ইনার প্রোডাক্ট</td></tr></tbody></table></div>
+<aside class="callout tip"><b>পরামর্শ</b><p>টেবিল বড় হলে HNSW বা IVFFlat ইনডেক্স দিন। ব্রাউজারের প্র্যাকটিস ল্যাবে pgvector ও pg_trgm নেই, তাই ওই দুটি উদাহরণ Docker-এ চালান।</p></aside>
+</div></section><section class="module reveal lv-r" id="m23"><div class="mhead"><span class="num" aria-hidden="true">23</span><div><span class="badge">মডিউল 23 · রেফারেন্স</span><h2>চিট শিট, শব্দকোষ, পরের ধাপ</h2></div></div><div class="body">
+<h3>SQL দ্রুত রেফারেন্স</h3>
+<div class="tbl"><table><thead><tr><th>কাজ</th><th>স্টেটমেন্ট</th></tr></thead><tbody><tr><td>টেবিল বানানো</td><td>CREATE TABLE t (id INT PRIMARY KEY, name TEXT);</td></tr><tr><td>ইনসার্ট</td><td>INSERT INTO t (id, name) VALUES (1, 'a');</td></tr><tr><td>পড়া</td><td>SELECT name FROM t WHERE id = 1;</td></tr><tr><td>আপডেট</td><td>UPDATE t SET name = 'b' WHERE id = 1;</td></tr><tr><td>মোছা</td><td>DELETE FROM t WHERE id = 1;</td></tr><tr><td>জয়েন</td><td>SELECT a.x, b.y FROM a JOIN b ON b.a_id = a.id;</td></tr><tr><td>অ্যাগ্রিগেট</td><td>SELECT k, count(*) FROM t GROUP BY k;</td></tr><tr><td>ইনডেক্স</td><td>CREATE INDEX idx_t_name ON t (name);</td></tr><tr><td>ট্রানজ্যাকশন</td><td>BEGIN; ... COMMIT;</td></tr><tr><td>প্ল্যান</td><td>EXPLAIN (ANALYZE) SELECT ...;</td></tr></tbody></table></div>
+<h3>psql কমান্ড</h3>
+<div class="tbl"><table><thead><tr><th>কমান্ড</th><th>কাজ</th></tr></thead><tbody><tr><td>\l</td><td>ডেটাবেসের তালিকা</td></tr><tr><td>\c name</td><td>ডেটাবেসে সংযোগ</td></tr><tr><td>\dt</td><td>টেবিলের তালিকা</td></tr><tr><td>\d table</td><td>টেবিলের বিবরণ</td></tr><tr><td>\du</td><td>রোলের তালিকা</td></tr><tr><td>\dn</td><td>স্কিমার তালিকা</td></tr><tr><td>\x</td><td>বিস্তারিত আউটপুট চালু বা বন্ধ</td></tr><tr><td>\timing</td><td>কুয়েরির সময় দেখায়</td></tr><tr><td>\i file.sql</td><td>ফাইল চালায়</td></tr><tr><td>\q</td><td>বের হওয়া</td></tr></tbody></table></div>
+<h3>শব্দকোষ</h3>
+<div class="tbl"><table><thead><tr><th>শব্দ</th><th>অর্থ</th></tr></thead><tbody><tr><td>সারি, কলাম</td><td>একটি রেকর্ড, এবং প্রতিটি রেকর্ডের একটি নামকরা ঘর</td></tr><tr><td>Primary key</td><td>যে কলাম সারিকে অনন্যভাবে চিহ্নিত করে</td></tr><tr><td>Foreign key</td><td>যে কলাম অন্য টেবিলের সারির দিকে নির্দেশ করে</td></tr><tr><td>Index</td><td>অতিরিক্ত কাঠামো যা খোঁজা দ্রুত করে</td></tr><tr><td>Transaction</td><td>একদল স্টেটমেন্ট যা একসঙ্গে সফল বা ব্যর্থ হয়</td></tr><tr><td>MVCC</td><td>প্রতিটি ট্রানজ্যাকশন স্ন্যাপশট দেখে, পাঠক লেখককে আটকায় না</td></tr><tr><td>WAL</td><td>স্থায়িত্ব, রিকভারি ও রেপ্লিকেশনের জন্য ব্যবহৃত লগ</td></tr><tr><td>VACUUM</td><td>আপডেট ও ডিলিটে জমা মৃত সারির সংস্করণ পরিষ্কার করে</td></tr><tr><td>Schema</td><td>ডেটাবেসের ভেতরে টেবিলের নেমস্পেস (ফোল্ডার)</td></tr><tr><td>View</td><td>সংরক্ষিত কুয়েরি যা টেবিলের মতো দেখায়</td></tr><tr><td>Role</td><td>অনুমতিসহ ইউজার বা গ্রুপ</td></tr><tr><td>CTE</td><td>একটি কুয়েরির ভেতরে নামকরা সাময়িক ফলাফল (WITH)</td></tr><tr><td>Replica</td><td>প্রাইমারি থেকে সিঙ্ক রাখা সার্ভারের কপি</td></tr></tbody></table></div>
+<h3>পরের ধাপ</h3>
+<ul><li>প্র্যাকটিস ল্যাবে ইউনিভার্সিটি স্কিমা মুখস্থ থেকে নতুন করে বানান, তারপর নিজের টেবিল যোগ করুন।</li><li>যেকোনো কমান্ডের খুঁটিনাটির জন্য PostgreSQL-এর অফিসিয়াল ডকুমেন্টেশন পড়ুন।</li><li>নিজের ধীর কুয়েরিতে <code>EXPLAIN ANALYZE</code> অনুশীলন করুন।</li><li>যেকোনো ভাষায় ছোট একটি অ্যাপ বানান যা ড্রাইভারের মাধ্যমে PostgreSQL-এর সঙ্গে কথা বলে।</li></ul>
+<aside class="callout take"><b>মূল কথা</b><p>আপনি এখন পুরো পথটি জানেন: ধারণা, SQL, ডিজাইন, পারফরম্যান্স, প্রোগ্রামেবিলিটি ও অপারেশন। দক্ষতা আসে বানানোর মাধ্যমে, তাই একটি প্রজেক্ট চালু রাখুন।</p></aside>
+</div></section>
+  <footer class="foot"><span>উদাহরণে একটি কাল্পনিক স্কিমা ব্যবহার হয়েছে: students, courses, enrollments।</span><span>বাংলা সংস্করণ · <a href="#top">উপরে যান</a></span></footer>
+</main>
+</div>
+<aside class="lab" id="lab" data-t="{&quot;loading&quot;: &quot;PostgreSQL লোড হচ্ছে...&quot;, &quot;ready&quot;: &quot;PostgreSQL প্রস্তুত&quot;, &quot;offline&quot;: &quot;অফলাইন&quot;, &quot;offlineMsg&quot;: &quot;ল্যাব প্রথমবার ইন্টারনেট থেকে আসল PostgreSQL (WebAssembly) নামায়। ইন্টারনেটে যুক্ত হয়ে আবার চালান চাপুন।&quot;, &quot;metaMsg&quot;: &quot;সমর্থিত শর্টকাট: \\dt (টেবিলের তালিকা) ও \\d table_name (টেবিলের বিবরণ)। অন্য psql কমান্ড শুধু আসল psql-এ চলে।&quot;, &quot;rows&quot;: &quot;সারি&quot;, &quot;confirm&quot;: &quot;ল্যাবের সব টেবিল মুছে ফেলবেন?&quot;, &quot;resetDone&quot;: &quot;ল্যাব ডেটাবেস খালি হয়েছে।&quot;}" aria-label="প্র্যাকটিস ল্যাব"><div class="labbar"><b>প্র্যাকটিস ল্যাব</b><span class="status" id="lab-status" role="status"></span><span class="spacer"></span><button class="btn sm" id="lab-sample" type="button">নমুনা ডেটা</button><button class="btn sm" id="lab-reset" type="button">রিসেট</button><button class="btn sm" id="lab-close" type="button" aria-label="Close">✕</button></div><div class="labgrid"><div class="ed"><textarea id="lab-sql" spellcheck="false" placeholder="এখানে যেকোনো PostgreSQL লিখুন..."></textarea><div class="acts"><button class="btn primary sm" id="lab-run" type="button">চালান ▶</button><span class="hint">Ctrl + Enter চাপলে চলবে</span></div></div><div class="out" id="lab-out" aria-live="polite"></div></div></aside>
+<script src="assets/app.js"></script>
+<script src="assets/lab.js"></script>
+</body>
+</html>
