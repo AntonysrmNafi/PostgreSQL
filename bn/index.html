@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PostgreSQL, শূন্য থেকে অ্যাডভান্সড</title>
 <meta name="description" content="তেইশটি মডিউলের এই ক্লাস ধরে নেয় আপনি কিছুই জানেন না। ডেটাবেস কী থেকে শুরু করে রিকার্সিভ কুয়েরি, PL/pgSQL, রো লেভেল সিকিউরিটি, রেপ্লিকেশন ও pgvector পর্যন্ত সব আছে, সঙ্গে ব্রাউজারেই আসল PostgreSQL-এর প্র্যাকটিস ল্যাব।">
-<script src="assets/theme.js"></script>
+<script src="../assets/theme.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Hind+Siliguri:wght@500;700&family=Space+Grotesk:wght@500;700&family=Space+Mono:wght@400;700&display=swap">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="../assets/style.css">
 <noscript><style>.reveal{opacity:1;transform:none}</style></noscript>
 </head>
 <body>
@@ -17,7 +17,7 @@
   <button class="btn" id="menu" type="button" aria-label="মেনু">☰</button>
   <a class="brand" href="#top"><span class="mark">Pg</span><span>PostgreSQL</span></a>
   <span class="spacer"></span>
-  <a class="btn" href="index.html" hreflang="en">English</a>
+  <a class="btn" href="../" hreflang="en">English</a>
   <button class="btn" id="lab-open" type="button">▶ প্র্যাকটিস ল্যাব</button>
   <button class="btn" id="theme" type="button" aria-label="থিম">◐<span class="lbl">থিম</span></button>
 </header>
@@ -533,7 +533,7 @@ SELECT content FROM docs ORDER BY embedding &lt;=&gt; '[1,0,0]' LIMIT 2;</code><
 </main>
 </div>
 <aside class="lab" id="lab" data-t="{&quot;loading&quot;: &quot;PostgreSQL লোড হচ্ছে...&quot;, &quot;ready&quot;: &quot;PostgreSQL প্রস্তুত&quot;, &quot;offline&quot;: &quot;অফলাইন&quot;, &quot;offlineMsg&quot;: &quot;ল্যাব প্রথমবার ইন্টারনেট থেকে আসল PostgreSQL (WebAssembly) নামায়। ইন্টারনেটে যুক্ত হয়ে আবার চালান চাপুন।&quot;, &quot;metaMsg&quot;: &quot;সমর্থিত শর্টকাট: \\dt (টেবিলের তালিকা) ও \\d table_name (টেবিলের বিবরণ)। অন্য psql কমান্ড শুধু আসল psql-এ চলে।&quot;, &quot;rows&quot;: &quot;সারি&quot;, &quot;confirm&quot;: &quot;ল্যাবের সব টেবিল মুছে ফেলবেন?&quot;, &quot;resetDone&quot;: &quot;ল্যাব ডেটাবেস খালি হয়েছে।&quot;}" aria-label="প্র্যাকটিস ল্যাব"><div class="labbar"><b>প্র্যাকটিস ল্যাব</b><span class="status" id="lab-status" role="status"></span><span class="spacer"></span><button class="btn sm" id="lab-sample" type="button">নমুনা ডেটা</button><button class="btn sm" id="lab-reset" type="button">রিসেট</button><button class="btn sm" id="lab-close" type="button" aria-label="Close">✕</button></div><div class="labgrid"><div class="ed"><textarea id="lab-sql" spellcheck="false" placeholder="এখানে যেকোনো PostgreSQL লিখুন..."></textarea><div class="acts"><button class="btn primary sm" id="lab-run" type="button">চালান ▶</button><span class="hint">Ctrl + Enter চাপলে চলবে</span></div></div><div class="out" id="lab-out" aria-live="polite"></div></div></aside>
-<script src="assets/app.js"></script>
-<script src="assets/lab.js"></script>
+<script src="../assets/app.js"></script>
+<script src="../assets/lab.js"></script>
 </body>
 </html>
